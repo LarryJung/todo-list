@@ -13,11 +13,7 @@ import java.util.stream.Collectors;
 @Embeddable
 public class References {
 
-//    // eager를 안할 수는 없을까?
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinTable(name = "TASK_has_REFERENCE",
-//            joinColumns = @JoinColumn(name = "PARENT_ID"),
-//            inverseJoinColumns = @JoinColumn(name = "REFERENCE_ID"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> references = new ArrayList<>();
 
     public boolean isAllCompleted() {
@@ -45,12 +41,6 @@ public class References {
         }
         return null;
     }
-
-//    public References addAll(List<Task> tasks, Task counterPart) {
-//        references.addAll(tasks);
-//        tasks.stream().forEach(t -> t.addSubTask(counterPart));
-//        return this;
-//    }
 
     @Override
     public String toString() {

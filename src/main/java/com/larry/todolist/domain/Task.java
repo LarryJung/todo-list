@@ -37,9 +37,25 @@ public class Task {
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
 
+    @AssociationOverride(
+            name = "references",
+            joinTable = @JoinTable(
+                    name = "MASTER_has_SUB",
+                    joinColumns = @JoinColumn(name = "MASTER_ID"),
+                    inverseJoinColumns = @JoinColumn(name = "SUB_ID")
+            )
+    )
     @Embedded
     private References subTasks;
 
+    @AssociationOverride(
+            name = "references",
+            joinTable = @JoinTable(
+                    name = "SUB_has_MASTER",
+                    joinColumns = @JoinColumn(name = "SUB_ID"),
+                    inverseJoinColumns = @JoinColumn(name = "MASTER_ID")
+            )
+    )
     @Embedded
     private References masterTasks;
 
@@ -47,12 +63,12 @@ public class Task {
         return new Task(todo);
     }
 
-    private Task (String todo) {
+    private Task(String todo) {
         this.todo = todo;
     }
 
     public Task addSubTask(Task subTask) {
-        if(this.subTasks == null) {
+        if (this.subTasks == null) {
             this.subTasks = new References();
         }
         this.subTasks = subTasks.addSubTask(subTask, this);
@@ -60,17 +76,12 @@ public class Task {
     }
 
     public Task addMasterTask(Task masterTask) {
-        if(this.masterTasks == null) {
+        if (this.masterTasks == null) {
             this.masterTasks = new References();
         }
         this.masterTasks = masterTasks.addMasterTask(masterTask, this);
         return this;
     }
-
-//    public Task addSubTask(Task ... tasks) {
-//        this.references = references.addAll(Arrays.asList(tasks), this);
-//        return this;
-//    }
 
     public boolean wasCompleted() {
         return completedDate != null;
