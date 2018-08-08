@@ -10,8 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.larry.todolist.domain.support.TaskType.SUB;
@@ -55,7 +54,9 @@ public class TaskAcceptanceTest {
         Long laundry = registerTask("빨래");
         Long chores = registerTask("집안일");
         ReferenceTaskDto dto = new ReferenceTaskDto(SUB, new Long[]{laundry, cleaning, cleaningRoom});
-        ResponseEntity<Task> response = restTemplate.postForEntity(String.format("/api/tasks/%d", chores), dto, Task.class);
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<ReferenceTaskDto> requestEntity = new HttpEntity<>(dto, headers);
+        ResponseEntity<Task> response = restTemplate.exchange(String.format("/api/tasks/%d", chores), HttpMethod.PUT, requestEntity, Task.class);
         assertThat(response.getBody().getTodo(), is("집안일"));
         assertThat(response.getBody().getSubTasks().toString(), is("빨래,청소,방청소"));
     }

@@ -1,7 +1,5 @@
 package com.larry.todolist.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -46,7 +44,7 @@ public class References {
 
     @Override
     public String toString() {
-        return references.stream().map(ref -> ref.getTodo()).collect(Collectors.joining(","));
+        return references.stream().map(Task::getTodo).collect(Collectors.joining(","));
     }
 
 }

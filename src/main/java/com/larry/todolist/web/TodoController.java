@@ -34,7 +34,7 @@ public class TodoController {
                 .body(newTask);
     }
 
-    @PostMapping("/{presentTaskId}")
+    @PutMapping("/{presentTaskId}")
     public ResponseEntity<Task> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
         Task presentTask = taskService.findById(presentTaskId);
         Task updateTask = taskService.registerReferences(presentTask, dto);
@@ -42,6 +42,8 @@ public class TodoController {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(updateTask);
     }
+
+
 
 
 
