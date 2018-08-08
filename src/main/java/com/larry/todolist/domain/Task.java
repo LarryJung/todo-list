@@ -77,6 +77,10 @@ public class Task {
     }
 
     public Task completeTask() {
+        if (subTasks == null) {
+            this.completedDate = LocalDateTime.now();
+            return this;
+        }
         if (subTasks.isAllCompleted()) {
             this.completedDate = LocalDateTime.now();
             return this;

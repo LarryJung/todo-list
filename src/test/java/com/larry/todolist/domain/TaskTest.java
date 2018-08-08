@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class TaskTest {
 
@@ -37,8 +38,32 @@ public class TaskTest {
         assertNull(cleaningRoom.getSubTasks());
     }
 
-    @Test
-    public void isCompleteTest() {
+    @Test(expected = RuntimeException.class)
+    public void completeTest_not_completed_at_subTask() {
+        cleaning.completeTask();
+    }
 
+    @Test
+    public void completeTest_completed_at_subTask() {
+        cleaningRoom.completeTask();
+        cleaning.completeTask();
+        assertTrue(cleaning.wasCompleted());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void completeTest_completed_fail_at_one_subTask() {
+        cleaningRoom.completeTask();
+        cleaning.completeTask();
+        // except for laundry
+        chores.completeTask();
+    }
+
+    @Test
+    public void completeTest_all_pass() {
+        cleaningRoom.completeTask();
+        cleaning.completeTask();
+        laundry.completeTask();
+        chores.completeTask();
+        assertTrue(chores.wasCompleted());
     }
 }
