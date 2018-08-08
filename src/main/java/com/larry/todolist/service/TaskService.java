@@ -1,13 +1,15 @@
 package com.larry.todolist.service;
 
-
 import com.larry.todolist.domain.Task;
+import com.larry.todolist.dto.ReferenceTaskDto;
 import com.larry.todolist.dto.TaskRequestDto;
 import com.larry.todolist.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,19 +33,26 @@ public class TaskService {
 
     // tansactional??
     public Task save(TaskRequestDto dto) {
-        Task newTask = dto.toEntity();
-        if (dto.hasReferences()) {
-            Arrays.stream(dto.getReferences()).forEach(ref -> findById(ref).addSubTask(newTask));
+        Task task = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
+        return registerReferences(task, dto.getSubTasksDto());
+    }
+
+    public Task registerReferences(Task presentTask, ReferenceTaskDto references) {
+        if (!references.hasReference()) {
+            return presentTask;
         }
-        return taskRepository.save(newTask);
+        Method method = references.getTaskType().retrieveMethod(presentTask);
+        Arrays.stream(references.getReferenceTasks()).forEach(l -> {
+            try {
+                method.invoke(findById(l), presentTask);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        });
+        return save(presentTask);
     }
 
     public Task save(Task task) {
         return taskRepository.save(task);
-    }
-
-    public void registerReferences(Long taskId, Long ... references) {
-        Task presentTask = findById(taskId);
-        Arrays.stream(references).forEach(l -> findById(l).addSubTask(presentTask));
     }
 }

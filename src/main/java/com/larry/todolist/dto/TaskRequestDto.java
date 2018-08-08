@@ -1,34 +1,26 @@
 package com.larry.todolist.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.larry.todolist.domain.Task;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Arrays;
 
 @NoArgsConstructor
 @Setter
 @Getter
 public class TaskRequestDto {
 
+    @JsonProperty(value = "todo")
     private String todo;
-    private Long[] references;
+
+    @JsonProperty(value = "masterTasksDto")
+    private ReferenceTaskDto masterTasksDto;
+
+    @JsonProperty(value = "subTasksDto")
+    private ReferenceTaskDto subTasksDto;
 
     public Task toEntity() {
         return Task.of(todo);
     }
-
-    public boolean hasReferences() {
-        return references.length > 0;
-    }
-
-    @Override
-    public String toString() {
-        return "TaskRequestDto{" +
-                "todo='" + todo + '\'' +
-                ", references=" + Arrays.toString(references) +
-                '}';
-    }
-
 }

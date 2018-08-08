@@ -1,6 +1,7 @@
 package com.larry.todolist.web;
 
 import com.larry.todolist.domain.Task;
+import com.larry.todolist.dto.ReferenceTaskDto;
 import com.larry.todolist.dto.TaskRequestDto;
 import com.larry.todolist.service.TaskService;
 import org.slf4j.Logger;
@@ -36,9 +37,12 @@ public class TodoController {
     }
 
     @PostMapping("/{presentTaskId}")
-    public ResponseEntity<Void> registerReferences(@PathVariable Long presentTaskId, Long ... references) {
-        taskService.registerReferences(presentTaskId, references);
+    public ResponseEntity<Void> registerReferences(@PathVariable Long presentTaskId, @RequestParam ReferenceTaskDto dto) {
+        Task presentTask = taskService.findById(presentTaskId);
+        taskService.registerReferences(presentTask, dto);
         return ResponseEntity.ok().build();
     }
+
+
 
 }
