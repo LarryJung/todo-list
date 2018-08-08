@@ -27,8 +27,8 @@ public class TodolistApplication {
 			Task cleaning = Task.of("청소");
 			Task cleaningRoom = Task.of("방청소");
 
-			chores.addSubTask(laundry, cleaning, cleaningRoom);
-			cleaning.addSubTask(cleaningRoom);
+			chores.addReferenceTask(laundry, cleaning, cleaningRoom);
+			cleaning.addReferenceTask(cleaningRoom);
 
 			taskService.save(chores);
 			taskService.save(laundry);

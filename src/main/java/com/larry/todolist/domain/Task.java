@@ -1,10 +1,8 @@
 package com.larry.todolist.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -36,46 +34,41 @@ public class Task {
     @Column(name = "TODO", nullable = false)
     private String todo;
 
-    // eager를 안할 수는 없을까?
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "TASK_has_CHILDREN",
-    joinColumns = @JoinColumn(name = "PARENT_ID"),
-    inverseJoinColumns = @JoinColumn(name = "CHILD_ID"))
-    private List<Task> children;
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    private LocalDateTime completedDate;
+
+    @Embedded
+    private References references;
 
     public static Task of(String todo) {
-        return new Task(todo, new ArrayList<>());
+        return new Task(todo);
     }
 
-    @Builder
-    public Task(String todo, List<Task> children) {
+    private Task (String todo) {
         this.todo = todo;
-        this.children = children;
+        this.references = new References();
     }
 
-    private boolean contains(Task task) {
-        return this.children.contains(task);
-    }
-
-    public Task addSubTask(Task subTask) {
-        System.out.println("들어온 테스크 " + subTask);
-        children.add(subTask);
+    public Task addReferenceTask(Task referenceTask) {
+        this.references = references.addTask(referenceTask, this);
         return this;
     }
 
-    public Task addSubTask(Task ... tasks) {
-        System.out.println("children " + children);
-        System.out.println("들오온 테슼스 " + tasks);
-        children.addAll(Arrays.asList(tasks));
+    public Task addReferenceTask(Task ... tasks) {
+        this.references = references.addAll(Arrays.asList(tasks), this);
         return this;
     }
 
-    public String toChildrenString() {
-        StringBuilder sb = new StringBuilder();
-        for (Task task : children) {
-            sb.append(task.getTodo());
+    public boolean wasCompleted() {
+        return completedDate != null;
+    }
+
+    public Task completeTask() {
+        if (references.isAllCompleted()) {
+            this.completedDate = LocalDateTime.now();
+            return this;
         }
-        return sb.toString();
+        throw new RuntimeException("아직 끝나지 않은 일들이 있습니다.");
     }
 
     @Override
@@ -87,11 +80,11 @@ public class Task {
                 Objects.equals(createdDate, task.createdDate) &&
                 Objects.equals(modifiedDate, task.modifiedDate) &&
                 Objects.equals(todo, task.todo) &&
-                Objects.equals(children, task.children);
+                Objects.equals(references, task.references);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, createdDate, modifiedDate, todo, children);
+        return Objects.hash(id, createdDate, modifiedDate, todo, references);
     }
 }
