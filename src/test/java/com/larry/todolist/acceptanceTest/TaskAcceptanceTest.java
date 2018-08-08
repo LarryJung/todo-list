@@ -38,17 +38,27 @@ public class TaskAcceptanceTest {
 
     @Test
     public void registerTask_with_subTaskList() {
-        Long 방청소 = registerTask("방청소");
-        log.info("방청소 Id : {}", 방청소);
+        Long cleaningRoom = registerTask("방청소");
+        log.info("방청소 Id : {}", cleaningRoom);
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo("청소");
-        taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, 방청소));
+        taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, cleaningRoom));
         ResponseEntity<Task> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, Task.class);
         assertThat(response.getBody().getTodo(), is("청소"));
         assertThat(response.getBody().getSubTasks().toString(), is("방청소"));
     }
 
-
+    @Test
+    public void registerTask_with_referenceInfo() {
+        Long cleaningRoom = registerTask("방청소");
+        Long cleaning = registerTask("청소");
+        Long laundry = registerTask("빨래");
+        Long chores = registerTask("집안일");
+        ReferenceTaskDto dto = new ReferenceTaskDto(SUB, new Long[]{laundry, cleaning, cleaningRoom});
+        ResponseEntity<Task> response = restTemplate.postForEntity(String.format("/api/tasks/%d", chores), dto, Task.class);
+        assertThat(response.getBody().getTodo(), is("집안일"));
+        assertThat(response.getBody().getSubTasks().toString(), is("빨래,청소,방청소"));
+    }
 
     public Long registerTask(String todo) {
         TaskRequestDto taskRequestDto = new TaskRequestDto();

@@ -35,10 +35,12 @@ public class TodoController {
     }
 
     @PostMapping("/{presentTaskId}")
-    public ResponseEntity<Void> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
+    public ResponseEntity<Task> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
         Task presentTask = taskService.findById(presentTaskId);
-        taskService.registerReferences(presentTask, dto);
-        return ResponseEntity.ok().build();
+        Task updateTask = taskService.registerReferences(presentTask, dto);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(updateTask);
     }
 
 
