@@ -38,7 +38,7 @@ public class TaskService {
     }
 
     public Task registerReferences(Task presentTask, ReferenceTaskDto references) {
-        if (!references.hasReference()) {
+        if (references == null) {
             return presentTask;
         }
         Method method = references.getTaskType().retrieveMethod(presentTask);

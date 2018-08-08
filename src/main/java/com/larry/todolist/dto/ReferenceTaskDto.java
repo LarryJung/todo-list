@@ -13,7 +13,4 @@ public class ReferenceTaskDto {
     private TaskType taskType;
     private Long[] referenceTasks;
 
-    public boolean hasReference() {
-        return referenceTasks.length > 0;
-    }
 }

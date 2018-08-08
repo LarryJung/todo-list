@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.net.URI;
@@ -27,7 +24,7 @@ public class TodoController {
     private TaskService taskService;
 
     @PostMapping("")
-    public ResponseEntity<Task> registerTask(@RequestParam TaskRequestDto dto) {
+    public ResponseEntity<Task> registerTask(@RequestBody TaskRequestDto dto) {
         log.info("new task : {}", dto);
         Task newTask = taskService.save(dto);
         URI url = URI.create(String.format("/api/tasks/%d", newTask.getId()));
@@ -37,7 +34,7 @@ public class TodoController {
     }
 
     @PostMapping("/{presentTaskId}")
-    public ResponseEntity<Void> registerReferences(@PathVariable Long presentTaskId, @RequestParam ReferenceTaskDto dto) {
+    public ResponseEntity<Void> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
         Task presentTask = taskService.findById(presentTaskId);
         taskService.registerReferences(presentTask, dto);
         return ResponseEntity.ok().build();
