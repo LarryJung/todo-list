@@ -23,4 +23,13 @@ public class TaskRequestDto {
     public Task toEntity() {
         return Task.of(todo);
     }
+
+    @Override
+    public String toString() {
+        return "TaskRequestDto{" +
+                "todo='" + todo + '\'' +
+                ", masterTasksDto=" + masterTasksDto +
+                ", subTasksDto=" + subTasksDto +
+                '}';
+    }
 }

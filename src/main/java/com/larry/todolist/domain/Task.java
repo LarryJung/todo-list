@@ -1,6 +1,8 @@
 package com.larry.todolist.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -57,6 +59,7 @@ public class Task {
             )
     )
     @Embedded
+    @JsonIgnore
     private References masterTasks;
 
     public static Task of(String todo) {
@@ -117,5 +120,18 @@ public class Task {
     public int hashCode() {
 
         return Objects.hash(id, createdDate, modifiedDate, todo, completedDate, subTasks, masterTasks);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
+                ", todo='" + todo + '\'' +
+                ", completedDate=" + completedDate +
+                ", subTasks=" + subTasks +
+                ", masterTasks=" + masterTasks +
+                '}';
     }
 }

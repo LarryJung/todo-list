@@ -28,6 +28,7 @@ public class TodoController {
         log.info("new task : {}", dto);
         Task newTask = taskService.save(dto);
         URI url = URI.create(String.format("/api/tasks/%d", newTask.getId()));
+        log.info("created task url : {}", url);
         return ResponseEntity.created(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(newTask);
