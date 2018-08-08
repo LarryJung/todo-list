@@ -38,7 +38,10 @@ public class Task {
     private LocalDateTime completedDate;
 
     @Embedded
-    private References references;
+    private References subTasks;
+
+    @Embedded
+    private References masterTasks;
 
     public static Task of(String todo) {
         return new Task(todo);
@@ -46,25 +49,35 @@ public class Task {
 
     private Task (String todo) {
         this.todo = todo;
-        this.references = new References();
     }
 
-    public Task addReferenceTask(Task referenceTask) {
-        this.references = references.addTask(referenceTask, this);
+    public Task addSubTask(Task subTask) {
+        if(this.subTasks == null) {
+            this.subTasks = new References();
+        }
+        this.subTasks = subTasks.addSubTask(subTask, this);
         return this;
     }
 
-    public Task addReferenceTask(Task ... tasks) {
-        this.references = references.addAll(Arrays.asList(tasks), this);
+    public Task addMasterTask(Task masterTask) {
+        if(this.masterTasks == null) {
+            this.masterTasks = new References();
+        }
+        this.masterTasks = masterTasks.addMasterTask(masterTask, this);
         return this;
     }
+
+//    public Task addSubTask(Task ... tasks) {
+//        this.references = references.addAll(Arrays.asList(tasks), this);
+//        return this;
+//    }
 
     public boolean wasCompleted() {
         return completedDate != null;
     }
 
     public Task completeTask() {
-        if (references.isAllCompleted()) {
+        if (subTasks.isAllCompleted()) {
             this.completedDate = LocalDateTime.now();
             return this;
         }
@@ -80,11 +93,14 @@ public class Task {
                 Objects.equals(createdDate, task.createdDate) &&
                 Objects.equals(modifiedDate, task.modifiedDate) &&
                 Objects.equals(todo, task.todo) &&
-                Objects.equals(references, task.references);
+                Objects.equals(completedDate, task.completedDate) &&
+                Objects.equals(subTasks, task.subTasks) &&
+                Objects.equals(masterTasks, task.masterTasks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, createdDate, modifiedDate, todo, references);
+
+        return Objects.hash(id, createdDate, modifiedDate, todo, completedDate, subTasks, masterTasks);
     }
 }

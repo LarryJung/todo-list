@@ -33,7 +33,7 @@ public class TaskService {
     public Task save(TaskRequestDto dto) {
         Task newTask = dto.toEntity();
         if (dto.hasReferences()) {
-            Arrays.stream(dto.getReferences()).forEach(ref -> findById(ref).addReferenceTask(newTask));
+            Arrays.stream(dto.getReferences()).forEach(ref -> findById(ref).addSubTask(newTask));
         }
         return taskRepository.save(newTask);
     }
@@ -44,6 +44,6 @@ public class TaskService {
 
     public void registerReferences(Long taskId, Long ... references) {
         Task presentTask = findById(taskId);
-        Arrays.stream(references).forEach(l -> findById(l).addReferenceTask(presentTask));
+        Arrays.stream(references).forEach(l -> findById(l).addSubTask(presentTask));
     }
 }
