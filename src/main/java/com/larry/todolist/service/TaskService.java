@@ -1,8 +1,8 @@
 package com.larry.todolist.service;
 
 import com.larry.todolist.domain.Task;
-import com.larry.todolist.dto.ReferenceTaskDto;
-import com.larry.todolist.dto.TaskRequestDto;
+import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
+import com.larry.todolist.dto.requestDto.TaskRequestDto;
 import com.larry.todolist.repository.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

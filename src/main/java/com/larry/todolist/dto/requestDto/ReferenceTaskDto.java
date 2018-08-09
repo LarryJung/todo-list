@@ -1,4 +1,4 @@
-package com.larry.todolist.dto;
+package com.larry.todolist.dto.requestDto;
 
 import com.larry.todolist.domain.support.TaskType;
 import lombok.Getter;

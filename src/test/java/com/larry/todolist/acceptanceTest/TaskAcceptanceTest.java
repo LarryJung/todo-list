@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.larry.todolist.domain.Task;
-import com.larry.todolist.dto.ReferenceTaskDto;
-import com.larry.todolist.dto.TaskRequestDto;
+import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
+import com.larry.todolist.dto.requestDto.TaskRequestDto;
+import com.larry.todolist.dto.responseDto.TaskResponseDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.IOException;
 
 import static com.larry.todolist.domain.support.TaskType.SUB;
 import static org.hamcrest.Matchers.is;
@@ -30,32 +33,36 @@ public class TaskAcceptanceTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
     @Test
-    public void registerTask_first() {
+    public void registerTask_first() throws IOException {
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo("집안일");
-        ResponseEntity<Task> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, Task.class);
+        ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
-        assertThat(response.getBody().getTodo(), is("집안일"));
+        log.info("response body : {}", response.getBody());
+
+        TaskResponseDto dto = mapper.readValue(response.getBody(), TaskResponseDto.class);
+        assertThat(dto.getTodo(), is("집안일"));
     }
 
     @Test
-    public void registerTask_with_subTaskList() throws JsonProcessingException {
+    public void registerTask_with_subTaskList() throws IOException {
         Long cleaningRoom = registerTask("방청소");
         log.info("방청소 Id : {}", cleaningRoom);
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo("청소");
         taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, cleaningRoom));
         ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
-        log.info("response body : {}", response.getBody());
-        // Json mapping을 다르게 했기 때문에, custom response dto를 만들어야겠다.
-
-//        assertThat(response.getBody().getTodo(), is("청소"));
-//        assertThat(response.getBody().getSubTasks().toString(), is("방청소"));
+        TaskResponseDto dto = mapper.readValue(response.getBody(), TaskResponseDto.class);
+        log.info("dto : {}", dto);
+        assertThat(dto.getTodo(), is("청소"));
+        log.info("Asdf " + dto.getSubReferences().toString());
     }
 
     @Test
-    public void registerTask_with_referenceInfo() {
+    public void registerTask_with_referenceInfo() throws IOException {
         Long cleaningRoom = registerTask("방청소");
         Long cleaning = registerTask("청소");
         Long laundry = registerTask("빨래");
@@ -65,30 +72,36 @@ public class TaskAcceptanceTest {
         HttpEntity<ReferenceTaskDto> requestEntity = new HttpEntity<>(dto, headers);
         ResponseEntity<String> response = restTemplate.exchange(String.format("/api/tasks/%d", chores), HttpMethod.PUT, requestEntity, String.class);
         log.info("response body : {}", response.getBody());
+        ObjectMapper mapper = new ObjectMapper();
+//        mapper.registerModule(new JavaTimeModule());
+        TaskResponseDto taskDto = mapper.readValue(response.getBody(), TaskResponseDto.class);
+        log.info("dto : {}", taskDto);
 //        assertThat(response.getBody().getTodo(), is("집안일"));
 //        assertThat(response.getBody().getSubTasks().toString(), is("빨래,청소,방청소"));
     }
 
-//    @Test
-//    public void completeTest_for_one_task_pass() {
-//        Long cleaningRoom = registerTask("방청소");
-//        ResponseEntity<Task> response = restTemplate.getForEntity(String.format("/api/tasks/%s/complete", cleaningRoom), Task.class);
+    @Test
+    public void completeTest_for_one_task_pass() {
+        Long cleaningRoom = registerTask("방청소");
+        ResponseEntity<String> response = restTemplate.getForEntity(String.format("/api/tasks/%s/complete", cleaningRoom), String.class);
+        log.info("response body : {}", response.getBody());
 //        assertTrue(response.getBody().wasCompleted());
-//    }
-//
-//    @Test
-//    public void completeTest_two_task_pass() {
-//        Long cleaningRoom = registerTask("방청소");
-//        restTemplate.getForEntity(String.format("/api/tasks/%s/complete", cleaningRoom), Task.class);
-//
-//        TaskRequestDto taskRequestDto = new TaskRequestDto();
-//        taskRequestDto.setTodo("청소");
-//        taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, cleaningRoom));
-//        Long cleaning = restTemplate.postForEntity("/api/tasks", taskRequestDto, Task.class).getBody().getId();
-//        ResponseEntity<Task> response = restTemplate.getForEntity(String.format("/api/tasks/%s/complete", cleaning), Task.class);
+    }
+
+    @Test
+    public void completeTest_two_task_pass() {
+        Long cleaningRoom = registerTask("방청소");
+        restTemplate.getForEntity(String.format("/api/tasks/%s/complete", cleaningRoom), Task.class);
+
+        TaskRequestDto taskRequestDto = new TaskRequestDto();
+        taskRequestDto.setTodo("청소");
+        taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, cleaningRoom));
+        Long cleaning = restTemplate.postForEntity("/api/tasks", taskRequestDto, Task.class).getBody().getId();
+        ResponseEntity<String> response = restTemplate.getForEntity(String.format("/api/tasks/%s/complete", cleaning), String.class);
+        log.info("reponse body : {}", response.getBody());
 //        assertTrue(response.getBody().wasCompleted());
-//    }
-//
+    }
+
 //    @Test
 //    public void completeTest_two_task_fail() {
 //        Long cleaningRoom = registerTask("방청소");

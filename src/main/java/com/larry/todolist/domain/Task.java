@@ -21,12 +21,12 @@ public class Task {
     private Long id;
 
 //    @DateTimeFormat
-//    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @CreatedDate
     private LocalDateTime createdDate;
 
 //    @DateTimeFormat
-//    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
@@ -34,7 +34,7 @@ public class Task {
     private String todo;
 
 //    @DateTimeFormat
-//    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
 
     @AssociationOverride(
@@ -92,11 +92,12 @@ public class Task {
     }
 
     public Task completeTask() {
-        System.out.println(todo + " and subs are " + (subTasks.getReferences()));
         if (subTasks == null) { // 이게 == null 인줄 알았는데 언제 초기화가 되는 거지???
             System.out.println("서브 테스크는 널 입니다. 그냥 완료 처리 하겠습니다.");
             this.completedDate = LocalDateTime.now();
             return this;
+
+
         }
         if (subTasks.isAllCompleted()) {
             System.out.println("서브 테스크들이 모두 완료되었습니다. 완료 처리 하겠습니다.");
