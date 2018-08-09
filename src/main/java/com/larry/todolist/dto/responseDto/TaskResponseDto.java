@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -38,10 +38,38 @@ public class TaskResponseDto {
     private String todo;
 
     @JsonProperty(value = "sub_references")
-    private List<RefTask> subReferences;
+    private List<RefTask> subTasks;
 
     @JsonProperty(value = "master_references")
-    private List<RefTask> masterReferences;
+    private List<RefTask> masterTasks;
+
+    private String makeRefString(List<RefTask> refTasks) {
+        if(refTasks == null) {
+            return null;
+        }
+        return refTasks.stream().map(r -> r.todo).collect(Collectors.joining(","));
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskResponseDto that = (TaskResponseDto) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(createdDate, that.createdDate) &&
+                Objects.equals(modifiedDate, that.modifiedDate) &&
+                Objects.equals(completedDate, that.completedDate) &&
+                Objects.equals(todo, that.todo) &&
+                Objects.equals(subTasks, that.subTasks) &&
+                Objects.equals(masterTasks, that.masterTasks);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, createdDate, modifiedDate, completedDate, todo, subTasks, masterTasks);
+    }
 
     @Override
     public String toString() {
@@ -51,8 +79,8 @@ public class TaskResponseDto {
                 ", modifiedDate=" + modifiedDate +
                 ", todo='" + todo + '\'' +
                 ", completedDate=" + completedDate +
-                ", subReferences=" + subReferences +
-                ", masterReferences=" + masterReferences +
+                ", subTasks=" + makeRefString(subTasks) +
+                ", masterTasks=" + makeRefString(masterTasks) +
                 '}';
     }
 
@@ -66,6 +94,11 @@ public class TaskResponseDto {
         public RefTask(Long id, String todo) {
             this.id = id;
             this.todo = todo;
+        }
+
+        @Override
+        public String toString() {
+            return todo;
         }
     }
 }

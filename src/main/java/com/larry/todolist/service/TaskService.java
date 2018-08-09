@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -63,6 +64,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    @Transactional
     public Task complete(Long presentTaskId) {
         return findById(presentTaskId).completeTask();
     }

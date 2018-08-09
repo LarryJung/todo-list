@@ -54,7 +54,7 @@ public class TaskDtoTest {
         responseDto.setId(1L);
         responseDto.setCompletedDate(LocalDateTime.now());
         responseDto.setTodo("청소");
-        responseDto.setSubReferences(Arrays.asList(new TaskResponseDto.RefTask(2L, "방청소"), new TaskResponseDto.RefTask(3L, "거실청소")));
+        responseDto.setSubTasks(Arrays.asList(new TaskResponseDto.RefTask(2L, "방청소"), new TaskResponseDto.RefTask(3L, "거실청소")));
 
         String jsonArray = mapper.writeValueAsString(responseDto);
         log.info("json : {}", jsonArray);

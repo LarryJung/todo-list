@@ -92,6 +92,8 @@ public class Task {
     }
 
     public Task completeTask() {
+        System.out.println("Present task? " + todo);
+        System.out.println("Present sub? " + subTasks);
         if (subTasks == null) { // 이게 == null 인줄 알았는데 언제 초기화가 되는 거지???
             System.out.println("서브 테스크는 널 입니다. 그냥 완료 처리 하겠습니다.");
             this.completedDate = LocalDateTime.now();

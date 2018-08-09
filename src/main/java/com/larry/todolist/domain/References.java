@@ -20,6 +20,10 @@ public class References {
 
     @JsonIgnore
     public boolean isAllCompleted() {
+        System.out.println("하잇");
+        for (Task task : references) {
+            System.out.println(task.getTodo() + " " + task.wasCompleted());
+        }
         return references.stream().allMatch(Task::wasCompleted);
     }
 
