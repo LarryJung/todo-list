@@ -20,21 +20,21 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DateTimeFormat
-    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+//    @DateTimeFormat
+//    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @CreatedDate
     private LocalDateTime createdDate;
 
-    @DateTimeFormat
-    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+//    @DateTimeFormat
+//    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
     @Column(name = "TODO", nullable = false)
     private String todo;
 
-    @DateTimeFormat
-    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+//    @DateTimeFormat
+//    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
 
     @AssociationOverride(
@@ -46,6 +46,7 @@ public class Task {
             )
     )
     @Embedded
+    @JsonUnwrapped(prefix = "sub_")
     private References subTasks;
 
     @AssociationOverride(
@@ -57,6 +58,7 @@ public class Task {
             )
     )
     @Embedded
+    @JsonUnwrapped(prefix = "master_")
     private References masterTasks;
 
     public static Task of(String todo) {

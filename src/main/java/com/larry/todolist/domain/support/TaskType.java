@@ -15,7 +15,13 @@ public enum TaskType {
     // 스트레티지 패턴을 사용해서 다르게 해보자.
     public Method retrieveMethod(Task target) {
         log.info("this enum is : {}", this);
-        String methodName = String.format("add%sTask", makeFirstUpperCase(this.name()));
+        String methodName = null;
+        if (this.equals(MASTER)){
+            methodName = "addSubTask";
+        }
+        if (this.equals(SUB)) {
+            methodName = "addMasterTask";
+        }
         try {
             return target.getClass().getDeclaredMethod(methodName, Task.class);
         } catch (NoSuchMethodException e) {

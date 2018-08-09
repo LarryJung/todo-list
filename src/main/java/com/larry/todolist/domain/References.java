@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 public class References {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("references")
+    @JsonIgnoreProperties({"subTasks", "masterTasks", "createdDate", "modifiedDate", "completedDate"})
     private List<Task> references;
 
+    @JsonIgnore
     public boolean isAllCompleted() {
         return references.stream().allMatch(Task::wasCompleted);
     }
@@ -55,6 +56,7 @@ public class References {
         return references.stream().map(Task::getTodo).collect(Collectors.joining(","));
     }
 
+    @JsonIgnore
     public boolean isEmpty() {
         return references.isEmpty();
     }

@@ -37,8 +37,9 @@ public class TaskService {
 
     // transactional??
     public Task save(TaskRequestDto dto) {
-        Task task = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
-        return registerReferences(task, dto.getSubTasksDto());
+        Task afterRegisterMaster = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
+        Task afterRegisterSub = registerReferences(afterRegisterMaster, dto.getSubTasksDto());
+        return afterRegisterSub;
     }
 
     public Task registerReferences(Task presentTask, ReferenceTaskDto references) {

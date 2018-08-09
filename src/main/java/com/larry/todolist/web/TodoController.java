@@ -25,12 +25,12 @@ public class TodoController {
 
     @PostMapping("")
     public ResponseEntity<Task> registerTask(@RequestBody TaskRequestDto dto) {
-        log.info("new task : {}", dto);
         Task newTask = taskService.save(dto);
+        log.info("new Task : {}", newTask);
         URI url = URI.create(String.format("/api/tasks/%d", newTask.getId()));
         log.info("created task url : {}", url);
         return ResponseEntity.created(url)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(newTask);
     }
 
@@ -39,7 +39,7 @@ public class TodoController {
         Task presentTask = taskService.findById(presentTaskId);
         Task updatedTask = taskService.registerReferences(presentTask, dto);
         return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(updatedTask);
     }
 
