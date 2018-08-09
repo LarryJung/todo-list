@@ -30,20 +30,26 @@ public class TodoController {
         URI url = URI.create(String.format("/api/tasks/%d", newTask.getId()));
         log.info("created task url : {}", url);
         return ResponseEntity.created(url)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(newTask);
     }
 
     @PutMapping("/{presentTaskId}")
     public ResponseEntity<Task> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
         Task presentTask = taskService.findById(presentTaskId);
-        Task updateTask = taskService.registerReferences(presentTask, dto);
+        Task updatedTask = taskService.registerReferences(presentTask, dto);
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(updateTask);
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(updatedTask);
     }
 
-
+    @GetMapping("/{presentTaskId}/complete")
+    public ResponseEntity<Task> completeTask(@PathVariable Long presentTaskId) {
+        Task updatedTask = taskService.complete(presentTaskId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(updatedTask);
+    }
 
 
 

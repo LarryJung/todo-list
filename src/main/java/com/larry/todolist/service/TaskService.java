@@ -35,10 +35,9 @@ public class TaskService {
         return taskRepository.findByTodo(todo).orElseThrow(EntityNotFoundException::new);
     }
 
-    // tansactional??
+    // transactional??
     public Task save(TaskRequestDto dto) {
         Task task = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
-        log.info("masterTask 저장했음 id : {}", task.getId());
         return registerReferences(task, dto.getSubTasksDto());
     }
 
@@ -61,5 +60,9 @@ public class TaskService {
 
     public Task save(Task task) {
         return taskRepository.save(task);
+    }
+
+    public Task complete(Long presentTaskId) {
+        return findById(presentTaskId).completeTask();
     }
 }

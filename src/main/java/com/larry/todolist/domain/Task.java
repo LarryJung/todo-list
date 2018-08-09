@@ -1,22 +1,17 @@
 package com.larry.todolist.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.*;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Transactional
 @NoArgsConstructor
-@Getter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Task {
@@ -25,10 +20,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @CreatedDate
     private LocalDateTime createdDate;
 
+    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @LastModifiedDate
     private LocalDateTime modifiedDate;
@@ -36,6 +33,7 @@ public class Task {
     @Column(name = "TODO", nullable = false)
     private String todo;
 
+    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
 
@@ -59,7 +57,6 @@ public class Task {
             )
     )
     @Embedded
-    @JsonIgnore
     private References masterTasks;
 
     public static Task of(String todo) {
@@ -72,6 +69,7 @@ public class Task {
 
     public Task addSubTask(Task subTask) {
         if (this.subTasks == null) {
+            System.out.println("서브 테스크가 널이었으므로 초기화합니다.");
             this.subTasks = new References();
         }
         this.subTasks = subTasks.addSubTask(subTask, this);
@@ -80,6 +78,7 @@ public class Task {
 
     public Task addMasterTask(Task masterTask) {
         if (this.masterTasks == null) {
+            System.out.println("마스터 테스크가 널이었으므로 초기화합니다.");
             this.masterTasks = new References();
         }
         this.masterTasks = masterTasks.addMasterTask(masterTask, this);
@@ -91,11 +90,14 @@ public class Task {
     }
 
     public Task completeTask() {
-        if (subTasks == null) {
+        System.out.println(todo + " and subs are " + (subTasks.getReferences()));
+        if (subTasks == null) { // 이게 == null 인줄 알았는데 언제 초기화가 되는 거지???
+            System.out.println("서브 테스크는 널 입니다. 그냥 완료 처리 하겠습니다.");
             this.completedDate = LocalDateTime.now();
             return this;
         }
         if (subTasks.isAllCompleted()) {
+            System.out.println("서브 테스크들이 모두 완료되었습니다. 완료 처리 하겠습니다.");
             this.completedDate = LocalDateTime.now();
             return this;
         }
@@ -133,5 +135,33 @@ public class Task {
                 ", subTasks=" + subTasks +
                 ", masterTasks=" + masterTasks +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public String getTodo() {
+        return todo;
+    }
+
+    public LocalDateTime getCompletedDate() {
+        return completedDate;
+    }
+
+    public References getSubTasks() {
+        return subTasks;
+    }
+
+    public References getMasterTasks() {
+        return masterTasks;
     }
 }

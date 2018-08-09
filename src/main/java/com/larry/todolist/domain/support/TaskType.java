@@ -12,30 +12,19 @@ public enum TaskType {
 
     private final Logger log = LoggerFactory.getLogger(TaskType.class);
 
-    public boolean isMaster() {
-        return this.equals(MASTER);
-    }
-
-    public boolean isSub() {
-        return this.equals(SUB);
-    }
-
+    // 스트레티지 패턴을 사용해서 다르게 해보자.
     public Method retrieveMethod(Task target) {
         log.info("this enum is : {}", this);
-        if (isMaster()) {
-            try {
-                return target.getClass().getDeclaredMethod("addSubTask", Task.class);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-        }
-        if (isSub()) {
-            try {
-                return target.getClass().getDeclaredMethod("addMasterTask", Task.class);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
+        String methodName = String.format("add%sTask", makeFirstUpperCase(this.name()));
+        try {
+            return target.getClass().getDeclaredMethod(methodName, Task.class);
+        } catch (NoSuchMethodException e) {
+            e.getStackTrace();
         }
         return null;
+    }
+
+    private String makeFirstUpperCase(String s) {
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
     }
 }

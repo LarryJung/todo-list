@@ -1,5 +1,6 @@
 package com.larry.todolist.domain;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,8 @@ import java.util.stream.Collectors;
 public class References {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Task> references = new ArrayList<>();
+    @JsonIgnoreProperties("references")
+    private List<Task> references;
 
     public boolean isAllCompleted() {
         return references.stream().allMatch(Task::wasCompleted);
@@ -25,6 +27,9 @@ public class References {
     }
 
     public References addSubTask(Task subTask, Task masterTask) {
+        if (references == null) {
+            references = new ArrayList<>();
+        }
         if (!contains(subTask)) {
             references.add(subTask);
             subTask.addMasterTask(masterTask);
@@ -34,6 +39,9 @@ public class References {
     }
 
     public References addMasterTask(Task masterTask, Task subTask) {
+        if (references == null) {
+            references = new ArrayList<>();
+        }
         if (!contains(masterTask)) {
             references.add(masterTask);
             masterTask.addSubTask(subTask);
@@ -47,4 +55,7 @@ public class References {
         return references.stream().map(Task::getTodo).collect(Collectors.joining(","));
     }
 
+    public boolean isEmpty() {
+        return references.isEmpty();
+    }
 }
