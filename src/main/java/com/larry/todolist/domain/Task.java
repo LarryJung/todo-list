@@ -1,6 +1,7 @@
 package com.larry.todolist.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import com.larry.todolist.exceptionHandle.CannotCompleteException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,7 +34,7 @@ public class Task {
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
 
-    @Size(min = 3, max = 20)
+    @Size(min = 2, max = 20)
     @Column(name = "TODO", nullable = false, unique = true)
     private String todo;
 
@@ -92,7 +93,7 @@ public class Task {
             return this;
         }
         if (!subTasks.isAllCompleted()) {
-            throw new RuntimeException(String.format("아직 끝나지 않은 일들이 있습니다. Id : %s", subTasks.getNotCompletedList()));
+            throw new CannotCompleteException(String.format("아직 끝나지 않은 일들이 있습니다. Id : %s", subTasks.getNotCompletedList()));
         }
         this.completedDate = LocalDateTime.now();
         return this;

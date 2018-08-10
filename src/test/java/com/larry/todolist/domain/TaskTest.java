@@ -1,5 +1,6 @@
 package com.larry.todolist.domain;
 
+import com.larry.todolist.exceptionHandle.CannotCompleteException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class TaskTest {
         assertThat(cleaningRoom.getMasterTasks(), is(new References(Arrays.asList(chores, cleaning))));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = CannotCompleteException.class)
     public void completeTest_not_completed_at_subTask() {
         cleaning.completeTask();
     }
@@ -46,7 +47,7 @@ public class TaskTest {
         assertTrue(cleaning.wasCompleted());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = CannotCompleteException.class)
     public void completeTest_completed_fail_at_one_subTask() {
         cleaningRoom.completeTask();
         cleaning.completeTask();

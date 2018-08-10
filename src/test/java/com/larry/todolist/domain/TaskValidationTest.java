@@ -28,7 +28,7 @@ public class TaskValidationTest {
 
     @Test
     public void minTodoTest() throws Exception {
-        Task task = Task.of("aa");
+        Task task = Task.of("a");
         Set<ConstraintViolation<Task>> constraintViolcations = validator.validate(task);
         assertThat(constraintViolcations.size(), is(1));
 

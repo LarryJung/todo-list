@@ -7,7 +7,6 @@ import com.larry.todolist.domain.Task;
 import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
 import com.larry.todolist.dto.responseDto.TaskResponseDto;
-import com.larry.todolist.repository.TaskRepository;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,20 +57,19 @@ public class TaskAcceptanceTest {
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo("a");
         ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
         log.info("response body : {}", response.getBody());
     }
 
     @Test
     public void registerTask_with_subTaskList() throws IOException {
         Long cleaningRoom = registerTask("방청소");
-        log.info("방청소 Id : {}", cleaningRoom);
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo("청소");
         taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, cleaningRoom));
         ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
         log.info("response json : {}", response.getBody());
         TaskResponseDto dto = mapper.readValue(response.getBody(), TaskResponseDto.class);
-        log.info("dto : {}", dto);
         assertThat(dto.getTodo(), is("청소"));
         assertThat(dto.getSubTasks().toString(), is("[방청소]"));
     }
@@ -105,18 +103,14 @@ public class TaskAcceptanceTest {
 
     @Test
     public void completeTest_two_task_pass() throws IOException {
-        // 방청소 등록 및 완료하기
         Long subTask = registerTask("책상정리");
         restTemplate.getForEntity(String.format("/api/tasks/%s/complete", subTask), String.class);
 
-        // 청소 할일 객체 만들고 방청소 하위 참조 등록
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo("방정리");
         taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, subTask));
-        ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
-        Long cleaning = mapper.readValue(response.getBody(), TaskResponseDto.class).getId();
+        Long cleaning = registerTask(taskRequestDto);
 
-        // 청소 완료하기
         ResponseEntity<String> cleaningResponse = restTemplate.getForEntity(String.format("/api/tasks/%s/complete", cleaning), String.class);
         log.info("response body : {}", cleaningResponse.getBody());
 
@@ -127,26 +121,16 @@ public class TaskAcceptanceTest {
 
     @Test
     public void completeTest_two_task_fail() throws IOException {
-        // 이것은 따로 예외 처리를 해서 responseEntity로 받아오기.
-
-        // 방청소 등록 및 완료하기
         Long subTask = registerTask("집에서놀기");
-//        restTemplate.getForEntity(String.format("/api/tasks/%s/complete", cleaningRoom), String.class);
 
-        // 청소 할일 객체 만들고 방청소 하위 참조 등록
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo("놀기");
         taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, subTask));
-        ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
-        Long masterTask = mapper.readValue(response.getBody(), TaskResponseDto.class).getId();
+        Long masterTask = registerTask(taskRequestDto);
 
-        // 청소 완료하기
-        ResponseEntity<String> cleaningResponse = restTemplate.getForEntity(String.format("/api/tasks/%s/complete", masterTask), String.class);
-        log.info("response body : {}", cleaningResponse.getBody());
-
-        TaskResponseDto taskDto = mapper.readValue(cleaningResponse.getBody(), TaskResponseDto.class);
-        log.info("dto : {}", taskDto);
-//        assertNotNull(taskDto.getCompletedDate());
+        ResponseEntity<String> response = restTemplate.getForEntity(String.format("/api/tasks/%s/complete", masterTask), String.class);
+        log.info("response body : {}", response.getBody());
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
@@ -173,7 +157,7 @@ public class TaskAcceptanceTest {
     }
 
     @Test
-    public void completeTest_one_not_complete() throws IOException {
+    public void completeTest_one_not_complete() {
         Long sub1 = registerTask("테스트구현");
         Long notCompleted = registerTask("완료 안될 대상");
         Long sub3 = registerTask("프론트구현");
@@ -190,8 +174,7 @@ public class TaskAcceptanceTest {
         restTemplate.getForEntity(String.format("/api/tasks/%d/complete", sub3), String.class);
 
         ResponseEntity<String> response = restTemplate.getForEntity(String.format("/api/tasks/%d/complete", master), String.class);
-        TaskResponseDto taskDto = mapper.readValue(response.getBody(), TaskResponseDto.class);
-        assertNotNull(taskDto.getCompletedDate());
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
@@ -205,17 +188,15 @@ public class TaskAcceptanceTest {
         assertThat(taskDto.getTodo(), is(updateContent));
     }
 
-    // 예외 처리 대상
     @Test
-    public void updateTest_unique_fail() throws IOException {
+    public void updateTest_unique_fail() {
         Long task1 = registerTask("잠자기"); registerTask("잠안자기");
         final String updateContent = "잠안자기";
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> requestEntity = new HttpEntity<>(updateContent, headers);
         ResponseEntity<String> response = restTemplate.exchange(String.format("/api/tasks/%d", task1), HttpMethod.PUT, requestEntity, String.class);
-        log.info("response body : {}", response.getBody());
-//        TaskResponseDto taskDto = mapper.readValue(response.getBody(), TaskResponseDto.class);
-//        assertThat(taskDto.getTodo(), is(updateContent));
+        log.info("response body {}", response.getBody());
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     public Long registerTask(String todo) {
@@ -223,6 +204,11 @@ public class TaskAcceptanceTest {
         taskRequestDto.setTodo(todo);
         ResponseEntity<Task> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, Task.class);
         return response.getBody().getId();
+    }
+
+    private Long registerTask(TaskRequestDto taskRequestDto) throws IOException {
+        ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
+        return mapper.readValue(response.getBody(), TaskResponseDto.class).getId();
     }
 
 }

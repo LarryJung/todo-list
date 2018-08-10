@@ -20,8 +20,8 @@ public class ErrorMsg {
     // 페이지는 없음.
     private String documentation_url = "http://localhost:8080/api/errors";
 
-    public ErrorMsg(Path field, Object value, String message) {
-        this.field = field.toString();
+    public ErrorMsg(String field, Object value, String message) {
+        this.field = field;
         this.value = value;
         this.message = message;
     }
