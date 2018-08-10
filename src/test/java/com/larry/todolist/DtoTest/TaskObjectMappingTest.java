@@ -16,9 +16,9 @@ import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class TaskDtoTest {
+public class TaskObjectMappingTest {
 
-    private final Logger log = LoggerFactory.getLogger(TaskDtoTest.class);
+    private final Logger log = LoggerFactory.getLogger(TaskObjectMappingTest.class);
 
     private ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())

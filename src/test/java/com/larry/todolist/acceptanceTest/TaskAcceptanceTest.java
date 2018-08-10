@@ -42,7 +42,7 @@ public class TaskAcceptanceTest {
             .enable(SerializationFeature.INDENT_OUTPUT);
 
     @Test
-    public void registerTask_first() throws IOException {
+    public void registerTask_pass() throws IOException {
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo("할일목록페이지만들기");
         ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
@@ -51,6 +51,14 @@ public class TaskAcceptanceTest {
 
         TaskResponseDto dto = mapper.readValue(response.getBody(), TaskResponseDto.class);
         assertThat(dto.getTodo(), is("할일목록페이지만들기"));
+    }
+
+    @Test
+    public void registerTask_validation_fail() {
+        TaskRequestDto taskRequestDto = new TaskRequestDto();
+        taskRequestDto.setTodo("a");
+        ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
+        log.info("response body : {}", response.getBody());
     }
 
     @Test
