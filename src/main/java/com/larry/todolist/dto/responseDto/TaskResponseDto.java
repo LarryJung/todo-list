@@ -37,10 +37,10 @@ public class TaskResponseDto {
     @JsonProperty("todo")
     private String todo;
 
-    @JsonProperty(value = "sub_references")
+    @JsonProperty(value = "sub_tasks")
     private List<RefTask> subTasks;
 
-    @JsonProperty(value = "master_references")
+    @JsonProperty(value = "master_tasks")
     private List<RefTask> masterTasks;
 
     private String makeRefString(List<RefTask> refTasks) {
@@ -49,7 +49,6 @@ public class TaskResponseDto {
         }
         return refTasks.stream().map(r -> r.todo).collect(Collectors.joining(","));
     }
-
 
     @Override
     public boolean equals(Object o) {

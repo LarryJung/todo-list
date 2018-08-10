@@ -25,16 +25,9 @@ public class TaskTest {
 
     @Test
     public void addReferenceTest() {
-        assertNull(chores.getMasterTasks());
         assertThat(chores.getSubTasks().toString(), is("빨래,청소,방청소"));
-
-        assertThat(laundry.getMasterTasks().toString(), is("집안일"));
         assertNull(laundry.getSubTasks());
-
-        assertThat(cleaning.getMasterTasks().toString(), is("집안일"));
         assertThat(cleaning.getSubTasks().toString(), is("방청소"));
-
-        assertThat(cleaningRoom.getMasterTasks().toString(), is("집안일,청소"));
         assertNull(cleaningRoom.getSubTasks());
     }
 

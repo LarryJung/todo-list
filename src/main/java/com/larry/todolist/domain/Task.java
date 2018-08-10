@@ -19,22 +19,19 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @CreatedDate
     private LocalDateTime createdDate;
 
-    //    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-    @Column(name = "TODO", nullable = false, unique = true)
-    private String todo;
-
-    //    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
+
+    @Column(name = "TODO", nullable = false, unique = true)
+    private String todo;
 
     @AssociationOverride(
             name = "references",
@@ -46,19 +43,10 @@ public class Task {
     )
     @Embedded
     @JsonUnwrapped(prefix = "sub_")
-    private References subTasks;
+    private References subTasks = new References();
 
-//    @AssociationOverride(
-//            name = "references",
-//            joinTable = @JoinTable(
-//                    name = "SUB_has_MASTER",
-//                    joinColumns = @JoinColumn(name = "SUB_ID"),
-//                    inverseJoinColumns = @JoinColumn(name = "MASTER_ID")
-//            )
-//    )
-//    @Embedded
-//    @JsonUnwrapped(prefix = "master_")
-//    private References masterTasks;
+    @JsonUnwrapped(prefix = "master_")
+    private References masterTasks = new References();
 
     public static Task of(String todo) {
         return new Task(todo);
@@ -78,21 +66,20 @@ public class Task {
     }
 
     public Task addSubTask(Task subTask) {
-        if (this.subTasks == null) {
-            System.out.println("서브 테스크가 널이었으므로 초기화합니다.");
-            this.subTasks = new References();
-        }
-        this.subTasks = subTasks.addSubTask(subTask, this);
+//        if (this.subTasks == null) {
+//            System.out.println("서브 테스크가 널이었으므로 초기화합니다.");
+//            this.subTasks = new References();
+//        }
+        this.subTasks = subTasks.addTask(subTask);
+        subTask.addMasterTask(this);
         return this;
     }
 
-    public Task addMasterTask(Task masterTask) {
-        masterTask.addSubTask(this);
-//        if (this.masterTasks == null) {
-//            System.out.println("마스터 테스크가 널이었으므로 초기화합니다.");
+    private Task addMasterTask(Task task) {
+//        if (masterTasks == null) {
 //            this.masterTasks = new References();
 //        }
-//        this.masterTasks = masterTasks.addMasterTask(masterTask, this);
+        this.masterTasks.addTask(task);
         return this;
     }
 
@@ -101,7 +88,7 @@ public class Task {
     }
 
     public Task completeTask() {
-        if (subTasks == null) {
+        if (subTasks.isEmpty()) {
             this.completedDate = LocalDateTime.now();
             return this;
         }
@@ -134,6 +121,10 @@ public class Task {
 
     public References getSubTasks() {
         return subTasks;
+    }
+
+    public References getMasterTasks() {
+        return masterTasks;
     }
 
     public Task updateTodo(String todo) {

@@ -16,54 +16,55 @@ public class References {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"subTasks", "masterTasks", "createdDate", "modifiedDate", "completedDate"})
-    private List<Task> references;
+    private List<Task> tasks;
 
-    public References(List<Task> references) {
-        this.references = references;
+    public References(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     @JsonIgnore
     public boolean isAllCompleted() {
-        return references.stream().allMatch(Task::wasCompleted);
+        return tasks.stream().allMatch(Task::wasCompleted);
     }
 
     public boolean contains(Task task) {
-        return references.contains(task);
+        return tasks.contains(task);
     }
 
-    public References addSubTask(Task subTask, Task masterTask) {
-        if (references == null) {
-            references = new ArrayList<>();
+    public References addTask(Task task) {
+        if (tasks == null) {
+            tasks = new ArrayList<>();
         }
-        if (!contains(subTask)) {
-            references.add(subTask);
-            subTask.addMasterTask(masterTask);
+        if (!contains(task)) {
+            tasks.add(task);
             return this;
         }
         return this;
     }
 
-    public References addMasterTask(Task masterTask, Task subTask) {
-        if (references == null) {
-            references = new ArrayList<>();
-        }
-        if (!contains(masterTask)) {
-            references.add(masterTask);
-            masterTask.addSubTask(subTask);
-            return this;
-        }
-        return null;
-    }
-
+    @JsonIgnore
     public List<Long> getNotCompletedList() {
-        return references.stream()
+        return tasks.stream()
                 .filter(r -> !r.wasCompleted())
-                .map(r -> r.getId())
+                .map(Task::getId)
                 .collect(Collectors.toList());
     }
 
+//    @Override
+//    public String toString() {
+//        return tasks.stream().map(Task::getTodo).collect(Collectors.joining(","));
+//    }
+
+
     @Override
     public String toString() {
-        return references.stream().map(Task::getTodo).collect(Collectors.joining(","));
+        return "References{" +
+                "tasks=" + tasks +
+                '}';
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return tasks == null;
     }
 }
