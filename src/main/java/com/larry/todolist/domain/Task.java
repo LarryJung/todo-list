@@ -21,12 +21,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @DateTimeFormat
+    //    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @CreatedDate
     private LocalDateTime createdDate;
 
-//    @DateTimeFormat
+    //    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @LastModifiedDate
     private LocalDateTime modifiedDate;
@@ -34,7 +34,7 @@ public class Task {
     @Column(name = "TODO", nullable = false, unique = true)
     private String todo;
 
-//    @DateTimeFormat
+    //    @DateTimeFormat
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
 
@@ -66,7 +66,16 @@ public class Task {
         return new Task(todo);
     }
 
+    public static Task of(Long id, String todo) {
+        return new Task(id, todo);
+    }
+
     private Task(String todo) {
+        this.todo = todo;
+    }
+
+    private Task(Long id, String todo) {
+        this.id = id;
         this.todo = todo;
     }
 
@@ -93,21 +102,15 @@ public class Task {
     }
 
     public Task completeTask() {
-        System.out.println("Present task? " + todo);
-        System.out.println("Present sub? " + subTasks);
-        if (subTasks == null) { // 이게 == null 인줄 알았는데 언제 초기화가 되는 거지???
-            System.out.println("서브 테스크는 널 입니다. 그냥 완료 처리 하겠습니다.");
-            this.completedDate = LocalDateTime.now();
-            return this;
-
-
-        }
-        if (subTasks.isAllCompleted()) {
-            System.out.println("서브 테스크들이 모두 완료되었습니다. 완료 처리 하겠습니다.");
+        if (subTasks == null) {
             this.completedDate = LocalDateTime.now();
             return this;
         }
-        throw new RuntimeException("아직 끝나지 않은 일들이 있습니다.");
+        if (!subTasks.isAllCompleted()) {
+            throw new RuntimeException(String.format("아직 끝나지 않은 일들이 있습니다. Id : ", subTasks.getNotCompletedList()));
+        }
+        this.completedDate = LocalDateTime.now();
+        return this;
     }
 
     @Override

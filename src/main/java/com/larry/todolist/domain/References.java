@@ -24,10 +24,6 @@ public class References {
 
     @JsonIgnore
     public boolean isAllCompleted() {
-        System.out.println("하잇");
-        for (Task task : references) {
-            System.out.println(task.getTodo() + " " + task.wasCompleted());
-        }
         return references.stream().allMatch(Task::wasCompleted);
     }
 
@@ -59,13 +55,15 @@ public class References {
         return null;
     }
 
+    public List<Long> getNotCompletedList() {
+        return references.stream()
+                .filter(r -> !r.wasCompleted())
+                .map(r -> r.getId())
+                .collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         return references.stream().map(Task::getTodo).collect(Collectors.joining(","));
-    }
-
-    @JsonIgnore
-    public boolean isEmpty() {
-        return references.isEmpty();
     }
 }
