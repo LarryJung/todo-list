@@ -16,9 +16,9 @@ import java.net.URI;
 
 @RequestMapping("/api/tasks")
 @Controller
-public class TodoController {
+public class ApiTodoController {
 
-    private final Logger log = LoggerFactory.getLogger(TodoController.class);
+    private final Logger log = LoggerFactory.getLogger(ApiTodoController.class);
 
     @Resource(name = "taskService")
     private TaskService taskService;

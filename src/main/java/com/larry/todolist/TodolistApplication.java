@@ -1,6 +1,7 @@
 package com.larry.todolist;
 
 import com.larry.todolist.domain.Task;
+import com.larry.todolist.repository.TaskRepository;
 import com.larry.todolist.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,24 +21,24 @@ public class TodolistApplication {
 		SpringApplication.run(TodolistApplication.class, args);
 	}
 
-//	@Bean
-//	public CommandLineRunner demo(TaskService taskService) {
-//		return (args) -> {
-//			// registerTask a couple of customers
-//			Task chores = Task.of("집안일");
-//			Task laundry = Task.of("빨래");
-//			Task cleaning = Task.of("청소");
-//			Task cleaningRoom = Task.of("방청소");
-//
-//			chores.addSubTask(laundry);
-//			chores.addSubTask(cleaning);
-//			chores.addSubTask(cleaningRoom);
-//			cleaning.addSubTask(cleaningRoom);
-//
-//			taskService.registerTask(chores);
-//			taskService.registerTask(laundry);
-//			taskService.registerTask(cleaning);
-//			taskService.registerTask(cleaningRoom);
-//		};
-//	}
+	@Bean
+	public CommandLineRunner demo(TaskRepository repository) {
+		return (args) -> {
+			// registerTask a couple of customers
+			Task chores = Task.of("집안일");
+			Task laundry = Task.of("빨래");
+			Task cleaning = Task.of("청소");
+			Task cleaningRoom = Task.of("방청소");
+
+			chores.addSubTask(laundry);
+			chores.addSubTask(cleaning);
+			chores.addSubTask(cleaningRoom);
+			cleaning.addSubTask(cleaningRoom);
+
+			repository.save(chores);
+			repository.save(laundry);
+			repository.save(cleaning);
+			repository.save(cleaningRoom);
+		};
+	}
 }

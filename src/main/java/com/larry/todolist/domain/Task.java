@@ -5,12 +5,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Entity
@@ -50,17 +48,17 @@ public class Task {
     @JsonUnwrapped(prefix = "sub_")
     private References subTasks;
 
-    @AssociationOverride(
-            name = "references",
-            joinTable = @JoinTable(
-                    name = "SUB_has_MASTER",
-                    joinColumns = @JoinColumn(name = "SUB_ID"),
-                    inverseJoinColumns = @JoinColumn(name = "MASTER_ID")
-            )
-    )
-    @Embedded
-    @JsonUnwrapped(prefix = "master_")
-    private References masterTasks;
+//    @AssociationOverride(
+//            name = "references",
+//            joinTable = @JoinTable(
+//                    name = "SUB_has_MASTER",
+//                    joinColumns = @JoinColumn(name = "SUB_ID"),
+//                    inverseJoinColumns = @JoinColumn(name = "MASTER_ID")
+//            )
+//    )
+//    @Embedded
+//    @JsonUnwrapped(prefix = "master_")
+//    private References masterTasks;
 
     public static Task of(String todo) {
         return new Task(todo);
@@ -89,11 +87,12 @@ public class Task {
     }
 
     public Task addMasterTask(Task masterTask) {
-        if (this.masterTasks == null) {
-            System.out.println("마스터 테스크가 널이었으므로 초기화합니다.");
-            this.masterTasks = new References();
-        }
-        this.masterTasks = masterTasks.addMasterTask(masterTask, this);
+        masterTask.addSubTask(this);
+//        if (this.masterTasks == null) {
+//            System.out.println("마스터 테스크가 널이었으므로 초기화합니다.");
+//            this.masterTasks = new References();
+//        }
+//        this.masterTasks = masterTasks.addMasterTask(masterTask, this);
         return this;
     }
 
@@ -111,39 +110,6 @@ public class Task {
         }
         this.completedDate = LocalDateTime.now();
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id) &&
-                Objects.equals(createdDate, task.createdDate) &&
-                Objects.equals(modifiedDate, task.modifiedDate) &&
-                Objects.equals(todo, task.todo) &&
-                Objects.equals(completedDate, task.completedDate) &&
-                Objects.equals(subTasks, task.subTasks) &&
-                Objects.equals(masterTasks, task.masterTasks);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, createdDate, modifiedDate, todo, completedDate, subTasks, masterTasks);
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
-                ", todo='" + todo + '\'' +
-                ", completedDate=" + completedDate +
-                ", subTasks=" + subTasks +
-                ", masterTasks=" + masterTasks +
-                '}';
     }
 
     public Long getId() {
@@ -170,12 +136,39 @@ public class Task {
         return subTasks;
     }
 
-    public References getMasterTasks() {
-        return masterTasks;
-    }
-
     public Task updateTodo(String todo) {
         this.todo = todo;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) &&
+                Objects.equals(createdDate, task.createdDate) &&
+                Objects.equals(modifiedDate, task.modifiedDate) &&
+                Objects.equals(todo, task.todo) &&
+                Objects.equals(completedDate, task.completedDate) &&
+                Objects.equals(subTasks, task.subTasks);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, createdDate, modifiedDate, todo, completedDate, subTasks);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
+                ", todo='" + todo + '\'' +
+                ", completedDate=" + completedDate +
+                ", subTasks=" + subTasks +
+                '}';
     }
 }

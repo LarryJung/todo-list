@@ -1,6 +1,7 @@
 package com.larry.todolist.service;
 
 import com.larry.todolist.domain.Task;
+import com.larry.todolist.domain.support.TaskType;
 import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
 import com.larry.todolist.repository.TaskRepository;
@@ -38,8 +39,7 @@ public class TaskService {
 
     public Task registerTask(TaskRequestDto dto) {
         Task afterRegisterMaster = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
-        Task afterRegisterSub = registerReferences(afterRegisterMaster, dto.getSubTasksDto());
-        return afterRegisterSub;
+        return registerReferences(afterRegisterMaster, dto.getSubTasksDto());
     }
 
     public Task registerReferences(Task presentTask, ReferenceTaskDto references) {
@@ -47,16 +47,25 @@ public class TaskService {
             log.info("reference is null");
             return save(presentTask);
         }
-        Method method = references.getTaskType().retrieveMethod(presentTask);
-        log.info("this method : {}", method.toString());
-        Arrays.stream(references.getReferenceTasks()).forEach(l -> {
-            try {
-                method.invoke(findById(l), presentTask);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        });
+        if (references.getTaskType().equals(TaskType.SUB)) {
+            Arrays.stream(references.getReferenceTasks()).forEach(r -> presentTask.addSubTask(findById(r)));
+        }
+        if (references.getTaskType().equals(TaskType.MASTER)) {
+            Arrays.stream(references.getReferenceTasks()).forEach(r -> findById(r).addSubTask(presentTask));
+        }
         return save(presentTask);
+
+//
+//        Method method = references.getTaskType().retrieveMethod(presentTask);
+//        log.info("this method : {}", method.toString());
+//        Arrays.stream(references.getReferenceTasks()).forEach(l -> {
+//            try {
+//                method.invoke(findById(l), presentTask);
+//            } catch (IllegalAccessException | InvocationTargetException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//        return save(presentTask);
     }
 
     private Task save(Task task) {
