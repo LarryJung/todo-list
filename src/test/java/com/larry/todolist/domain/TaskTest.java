@@ -3,6 +3,8 @@ package com.larry.todolist.domain;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -10,10 +12,10 @@ import static org.junit.Assert.assertTrue;
 
 public class TaskTest {
 
-    private Task chores = Task.of("집안일");
-    private Task laundry = Task.of("빨래");
-    private Task cleaning = Task.of("청소");
-    private Task cleaningRoom = Task.of("방청소");
+    private Task chores = Task.of(1L, "집안일");
+    private Task laundry = Task.of(2L, "빨래");
+    private Task cleaning = Task.of(3L, "청소");
+    private Task cleaningRoom = Task.of(4L, "방청소");
 
     @Before
     public void setup() {
@@ -25,10 +27,10 @@ public class TaskTest {
 
     @Test
     public void addReferenceTest() {
-        assertThat(chores.getSubTasks().toString(), is("빨래,청소,방청소"));
-        assertNull(laundry.getSubTasks());
-        assertThat(cleaning.getSubTasks().toString(), is("방청소"));
-        assertNull(cleaningRoom.getSubTasks());
+        assertThat(chores.getSubTasks(), is(new References(Arrays.asList(laundry, cleaning, cleaningRoom))));
+        assertThat(laundry.getSubTasks(), is(new References()));
+        assertThat(cleaning.getSubTasks(), is(new References(Arrays.asList(cleaningRoom))));
+        assertThat(cleaningRoom.getSubTasks(), is(new References()));
     }
 
     @Test(expected = RuntimeException.class)

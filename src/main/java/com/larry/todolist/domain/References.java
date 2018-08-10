@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
@@ -16,7 +17,7 @@ public class References {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"subTasks", "masterTasks", "createdDate", "modifiedDate", "completedDate"})
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     public References(List<Task> tasks) {
         this.tasks = tasks;
@@ -27,15 +28,8 @@ public class References {
         return tasks.stream().allMatch(Task::wasCompleted);
     }
 
-    public boolean contains(Task task) {
-        return tasks.contains(task);
-    }
-
     public References addTask(Task task) {
-        if (tasks == null) {
-            tasks = new ArrayList<>();
-        }
-        if (!contains(task)) {
+        if (!tasks.contains(task)) {
             tasks.add(task);
             return this;
         }
@@ -50,11 +44,10 @@ public class References {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public String toString() {
-//        return tasks.stream().map(Task::getTodo).collect(Collectors.joining(","));
-//    }
-
+    @JsonIgnore
+    public boolean isEmpty() {
+        return tasks == null;
+    }
 
     @Override
     public String toString() {
@@ -63,8 +56,17 @@ public class References {
                 '}';
     }
 
-    @JsonIgnore
-    public boolean isEmpty() {
-        return tasks == null;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        References that = (References) o;
+        return Objects.equals(tasks, that.tasks);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(tasks);
     }
 }
