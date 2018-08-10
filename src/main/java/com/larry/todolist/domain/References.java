@@ -18,6 +18,10 @@ public class References {
     @JsonIgnoreProperties({"subTasks", "masterTasks", "createdDate", "modifiedDate", "completedDate"})
     private List<Task> references;
 
+    public References(List<Task> references) {
+        this.references = references;
+    }
+
     @JsonIgnore
     public boolean isAllCompleted() {
         System.out.println("하잇");
