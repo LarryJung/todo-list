@@ -1,15 +1,18 @@
 package com.larry.todolist.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Getter
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -30,6 +33,7 @@ public class Task {
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
 
+    @Size(min = 3, max = 20)
     @Column(name = "TODO", nullable = false, unique = true)
     private String todo;
 
@@ -45,6 +49,8 @@ public class Task {
     @JsonUnwrapped(prefix = "sub_")
     private References subTasks = new References();
 
+    // DB에 등록하지 않음.
+    @Transient
     @JsonUnwrapped(prefix = "master_")
     private References masterTasks = new References();
 
@@ -66,20 +72,13 @@ public class Task {
     }
 
     public Task addSubTask(Task subTask) {
-//        if (this.subTasks == null) {
-//            System.out.println("서브 테스크가 널이었으므로 초기화합니다.");
-//            this.subTasks = new References();
-//        }
-        this.subTasks = subTasks.addTask(subTask);
+        subTasks = subTasks.addTask(subTask);
         subTask.addMasterTask(this);
         return this;
     }
 
-    private Task addMasterTask(Task task) {
-//        if (masterTasks == null) {
-//            this.masterTasks = new References();
-//        }
-        this.masterTasks.addTask(task);
+    private Task addMasterTask(Task masterTask) {
+        masterTasks = masterTasks.addTask(masterTask);
         return this;
     }
 
@@ -93,38 +92,10 @@ public class Task {
             return this;
         }
         if (!subTasks.isAllCompleted()) {
-            throw new RuntimeException(String.format("아직 끝나지 않은 일들이 있습니다. Id : ", subTasks.getNotCompletedList()));
+            throw new RuntimeException(String.format("아직 끝나지 않은 일들이 있습니다. Id : %s", subTasks.getNotCompletedList()));
         }
         this.completedDate = LocalDateTime.now();
         return this;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public String getTodo() {
-        return todo;
-    }
-
-    public LocalDateTime getCompletedDate() {
-        return completedDate;
-    }
-
-    public References getSubTasks() {
-        return subTasks;
-    }
-
-    public References getMasterTasks() {
-        return masterTasks;
     }
 
     public Task updateTodo(String todo) {
@@ -140,15 +111,16 @@ public class Task {
         return Objects.equals(id, task.id) &&
                 Objects.equals(createdDate, task.createdDate) &&
                 Objects.equals(modifiedDate, task.modifiedDate) &&
-                Objects.equals(todo, task.todo) &&
                 Objects.equals(completedDate, task.completedDate) &&
-                Objects.equals(subTasks, task.subTasks);
+                Objects.equals(todo, task.todo) &&
+                Objects.equals(subTasks, task.subTasks) &&
+                Objects.equals(masterTasks, task.masterTasks);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, createdDate, modifiedDate, todo, completedDate, subTasks);
+        return Objects.hash(id, createdDate, modifiedDate, completedDate, todo, subTasks, masterTasks);
     }
 
     @Override
@@ -157,9 +129,10 @@ public class Task {
                 "id=" + id +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +
-                ", todo='" + todo + '\'' +
                 ", completedDate=" + completedDate +
+                ", todo='" + todo + '\'' +
                 ", subTasks=" + subTasks +
+                ", masterTasks=" + masterTasks +
                 '}';
     }
 }

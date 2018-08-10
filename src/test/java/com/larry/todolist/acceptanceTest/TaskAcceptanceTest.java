@@ -1,6 +1,7 @@
 package com.larry.todolist.acceptanceTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.larry.todolist.domain.Task;
 import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
@@ -36,10 +37,9 @@ public class TaskAcceptanceTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Autowired
-    private TaskRepository taskRepository;
-
-    private ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .enable(SerializationFeature.INDENT_OUTPUT);
 
     @Test
     public void registerTask_first() throws IOException {
@@ -148,14 +148,11 @@ public class TaskAcceptanceTest {
         Long sub3 = registerTask("프론트구현");
         Long master = registerTask("과제만들기");
 
-        HttpHeaders headers = new HttpHeaders();
+        // 참조 관계 맵핑
         ReferenceTaskDto dtoForChores = new ReferenceTaskDto(SUB, new Long[]{sub3, sub2, sub1});
-        HttpEntity<ReferenceTaskDto> requestEntityForChores = new HttpEntity<>(dtoForChores, headers);
-        restTemplate.exchange(String.format("/api/tasks/%d", master), HttpMethod.POST, requestEntityForChores, String.class);
-
+        restTemplate.postForEntity(String.format("/api/tasks/%d", master), dtoForChores, String.class);
         ReferenceTaskDto dtoForCleaning = new ReferenceTaskDto(SUB, new Long[]{sub1});
-        HttpEntity<ReferenceTaskDto> requestEntityForCleaning = new HttpEntity<>(dtoForCleaning, headers);
-        restTemplate.exchange(String.format("/api/tasks/%d", sub2), HttpMethod.POST, requestEntityForCleaning, String.class);
+        restTemplate.postForEntity(String.format("/api/tasks/%d", sub2), dtoForCleaning, String.class);
 
         // careful to order
         restTemplate.getForEntity(String.format("/api/tasks/%d/complete", sub1), String.class);
@@ -163,39 +160,29 @@ public class TaskAcceptanceTest {
         restTemplate.getForEntity(String.format("/api/tasks/%d/complete", sub3), String.class);
 
         ResponseEntity<String> response = restTemplate.getForEntity(String.format("/api/tasks/%d/complete", master), String.class);
-        log.info("response body : {}", response.getBody());
-
         TaskResponseDto taskDto = mapper.readValue(response.getBody(), TaskResponseDto.class);
-        log.info("dto : {}", taskDto);
         assertNotNull(taskDto.getCompletedDate());
     }
 
     @Test
     public void completeTest_one_not_complete() throws IOException {
-        Long sub1 = registerTask("서브할일1");
-        Long notCompleted = registerTask("완료안될대상");
-        Long sub2 = registerTask("서브할일2");
-        Long master = registerTask("마스터할일");
+        Long sub1 = registerTask("테스트구현");
+        Long notCompleted = registerTask("완료 안될 대상");
+        Long sub3 = registerTask("프론트구현");
+        Long master = registerTask("과제만들기");
 
-        HttpHeaders headers = new HttpHeaders();
-        ReferenceTaskDto dtoForChores = new ReferenceTaskDto(SUB, new Long[]{sub2, notCompleted, sub1});
-        HttpEntity<ReferenceTaskDto> requestEntityForChores = new HttpEntity<>(dtoForChores, headers);
-        restTemplate.exchange(String.format("/api/tasks/%d", master), HttpMethod.POST, requestEntityForChores, String.class);
-
+        // 참조 관계 맵핑
+        ReferenceTaskDto dtoForChores = new ReferenceTaskDto(SUB, new Long[]{sub3, notCompleted, sub1});
+        restTemplate.postForEntity(String.format("/api/tasks/%d", master), dtoForChores, String.class);
         ReferenceTaskDto dtoForCleaning = new ReferenceTaskDto(SUB, new Long[]{sub1});
-        HttpEntity<ReferenceTaskDto> requestEntityForCleaning = new HttpEntity<>(dtoForCleaning, headers);
-        restTemplate.exchange(String.format("/api/tasks/%d", notCompleted), HttpMethod.POST, requestEntityForCleaning, String.class);
+        restTemplate.postForEntity(String.format("/api/tasks/%d", notCompleted), dtoForCleaning, String.class);
 
         // careful to order
         restTemplate.getForEntity(String.format("/api/tasks/%d/complete", sub1), String.class);
-//        restTemplate.getForEntity(String.format("/api/tasks/%d/complete", cleaning), String.class);
-        restTemplate.getForEntity(String.format("/api/tasks/%d/complete", sub2), String.class);
+        restTemplate.getForEntity(String.format("/api/tasks/%d/complete", sub3), String.class);
 
         ResponseEntity<String> response = restTemplate.getForEntity(String.format("/api/tasks/%d/complete", master), String.class);
-        log.info("response body : {}", response.getBody());
-
         TaskResponseDto taskDto = mapper.readValue(response.getBody(), TaskResponseDto.class);
-        log.info("dto : {}", taskDto);
         assertNotNull(taskDto.getCompletedDate());
     }
 

@@ -42,6 +42,7 @@ public class TaskService {
         return registerReferences(afterRegisterMaster, dto.getSubTasksDto());
     }
 
+    @Transactional
     public Task registerReferences(Task presentTask, ReferenceTaskDto references) {
         if (references == null) {
             log.info("reference is null");
@@ -54,18 +55,6 @@ public class TaskService {
             Arrays.stream(references.getReferenceTasks()).forEach(r -> findById(r).addSubTask(presentTask));
         }
         return save(presentTask);
-
-//
-//        Method method = references.getTaskType().retrieveMethod(presentTask);
-//        log.info("this method : {}", method.toString());
-//        Arrays.stream(references.getReferenceTasks()).forEach(l -> {
-//            try {
-//                method.invoke(findById(l), presentTask);
-//            } catch (IllegalAccessException | InvocationTargetException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        return save(presentTask);
     }
 
     private Task save(Task task) {

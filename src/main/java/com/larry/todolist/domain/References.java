@@ -46,13 +46,13 @@ public class References {
 
     @JsonIgnore
     public boolean isEmpty() {
-        return tasks == null;
+        return tasks.isEmpty();
     }
 
     @Override
     public String toString() {
         return "References{" +
-                "tasks=" + tasks +
+                "tasks=" + tasks.size() +
                 '}';
     }
 

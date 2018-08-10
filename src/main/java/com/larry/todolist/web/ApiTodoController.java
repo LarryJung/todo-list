@@ -36,6 +36,7 @@ public class ApiTodoController {
 
     @PostMapping("/{presentTaskId}")
     public ResponseEntity<Task> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
+        log.info("참조 거는 기능 수행!!");
         Task presentTask = taskService.findById(presentTaskId);
         Task updatedTask = taskService.registerReferences(presentTask, dto);
         return ResponseEntity.ok()
@@ -54,6 +55,7 @@ public class ApiTodoController {
 
     @GetMapping("/{presentTaskId}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable Long presentTaskId) {
+        log.info("일을 끝내러 왔습니다. {}", presentTaskId);
         Task updatedTask = taskService.complete(presentTaskId);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

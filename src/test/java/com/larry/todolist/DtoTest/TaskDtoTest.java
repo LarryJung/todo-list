@@ -22,7 +22,7 @@ public class TaskDtoTest {
 
     private ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
-            .enable(SerializationFeature.INDENT_OUTPUT);;
+            .enable(SerializationFeature.INDENT_OUTPUT);
 
     @Test
     public void simpleTask() throws IOException {

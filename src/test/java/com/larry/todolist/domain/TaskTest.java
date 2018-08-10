@@ -31,6 +31,7 @@ public class TaskTest {
         assertThat(laundry.getSubTasks(), is(new References()));
         assertThat(cleaning.getSubTasks(), is(new References(Arrays.asList(cleaningRoom))));
         assertThat(cleaningRoom.getSubTasks(), is(new References()));
+        assertThat(cleaningRoom.getMasterTasks(), is(new References(Arrays.asList(chores, cleaning))));
     }
 
     @Test(expected = RuntimeException.class)
