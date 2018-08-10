@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class Task {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-    @Column(name = "TODO", nullable = false)
+    @Column(name = "TODO", nullable = false, unique = true)
     private String todo;
 
 //    @DateTimeFormat
@@ -168,5 +169,10 @@ public class Task {
 
     public References getMasterTasks() {
         return masterTasks;
+    }
+
+    public Task updateTodo(String todo) {
+        this.todo = todo;
+        return this;
     }
 }

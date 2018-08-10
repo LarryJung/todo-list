@@ -23,7 +23,7 @@ public class TodolistApplication {
 //	@Bean
 //	public CommandLineRunner demo(TaskService taskService) {
 //		return (args) -> {
-//			// save a couple of customers
+//			// registerTask a couple of customers
 //			Task chores = Task.of("집안일");
 //			Task laundry = Task.of("빨래");
 //			Task cleaning = Task.of("청소");
@@ -34,10 +34,10 @@ public class TodolistApplication {
 //			chores.addSubTask(cleaningRoom);
 //			cleaning.addSubTask(cleaningRoom);
 //
-//			taskService.save(chores);
-//			taskService.save(laundry);
-//			taskService.save(cleaning);
-//			taskService.save(cleaningRoom);
+//			taskService.registerTask(chores);
+//			taskService.registerTask(laundry);
+//			taskService.registerTask(cleaning);
+//			taskService.registerTask(cleaningRoom);
 //		};
 //	}
 }

@@ -36,8 +36,7 @@ public class TaskService {
         return taskRepository.findByTodo(todo).orElseThrow(EntityNotFoundException::new);
     }
 
-    // transactional??
-    public Task save(TaskRequestDto dto) {
+    public Task registerTask(TaskRequestDto dto) {
         Task afterRegisterMaster = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
         Task afterRegisterSub = registerReferences(afterRegisterMaster, dto.getSubTasksDto());
         return afterRegisterSub;
@@ -60,12 +59,17 @@ public class TaskService {
         return save(presentTask);
     }
 
-    public Task save(Task task) {
+    private Task save(Task task) {
         return taskRepository.save(task);
     }
 
     @Transactional
     public Task complete(Long presentTaskId) {
         return findById(presentTaskId).completeTask();
+    }
+
+    @Transactional // unique 제약조건 때문에 겹치면 에러가 나겠지?
+    public Task update(Task presentTask, String todo) {
+        return presentTask.updateTodo(todo);
     }
 }

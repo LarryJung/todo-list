@@ -25,7 +25,7 @@ public class TodoController {
 
     @PostMapping("")
     public ResponseEntity<Task> registerTask(@RequestBody TaskRequestDto dto) {
-        Task newTask = taskService.save(dto);
+        Task newTask = taskService.registerTask(dto);
         log.info("new Task : {}", newTask);
         URI url = URI.create(String.format("/api/tasks/%d", newTask.getId()));
         log.info("created task url : {}", url);
@@ -34,10 +34,19 @@ public class TodoController {
                 .body(newTask);
     }
 
-    @PutMapping("/{presentTaskId}")
+    @PostMapping("/{presentTaskId}")
     public ResponseEntity<Task> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
         Task presentTask = taskService.findById(presentTaskId);
         Task updatedTask = taskService.registerReferences(presentTask, dto);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(updatedTask);
+    }
+
+    @PutMapping("/{presentTaskId}")
+    public ResponseEntity<Task> updateTaskContent(@PathVariable Long presentTaskId, @RequestBody String todo) {
+        Task presentTask = taskService.findById(presentTaskId);
+        Task updatedTask = taskService.update(presentTask, todo);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(updatedTask);
@@ -50,6 +59,8 @@ public class TodoController {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(updatedTask);
     }
+
+
 
 
 
