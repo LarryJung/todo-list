@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>SLiPP Java Web Programming</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+</head>
+<body>
+<br><br>
+<div class="container">
+    <div id="myDIV" class="header">
+        <h2>할 일 목록 페이지</h2>
+        <form>
+            <input type="text" id="myInput" placeholder="Title..." onfocusout="checkUnique()">
+            <input type="text" id="subTasksInput" placeholder="Subtasks...">
+            <input type="text" id="mastasksInput" placeholder="MasterTasks...">
+            <span onclick="newElement()" class="addBtn">Add</span>
+        </form>
+        <div class="magicsearch-wrapper" data-belong="magicsearch"
+             style="width: 350px; display: inline-block; float: none; margin: 0px;" data-index="1"><input
+                class="magicsearch multi" id="basic" placeholder="search names..." data-placeholder="search names..."
+                data-id="" style="margin: 0px; box-sizing: border-box; width: 350px; height: 56px;">
+            <div class="magicsearch-box" style="top: 56px;"></div>
+            <div class="multi-items" style="top: 8px; lef₩t: 8px; bottom: 8px; right: 8px;"></div>
+        </div>
+    </div>
+    <div class="container col-lg-6 nopadding">
+        <div class="row text-center">
+            <h2>Todos</h2>
+        </div>
+        <div id="todoListDiv">
+            <ul id="todoList">
+                <li>Hit the gym</li>
+                <li class="checked">Pay bills</li>
+                <li>Meet George</li>
+                <li>Buy eggs</li>
+                <li>Read a book</li>
+            </ul>
+        </div>
+        <!--Pagination-->
+        <div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="container col-lg-6 nopadding">
+        <div class="row text-center">
+            <h2>Dones</h2>
+        </div>
+        <div id="doneListDiv">
+            <ul id="doneList">
+                <li>밥먹기</li>
+                <li>숨쉬기</li>
+            </ul>
+        </div>
+        <!--Pagination-->
+        <div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<script src="js/jquery-2.2.0.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<script src="js/jquery.magicsearch.js"></script>
+<link href="css/normalize.css" rel="stylesheet">
+<!--<link href="css/style.css" rel="stylesheet">-->
+<link href="css/jquery.magicsearch.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/index.css">
+</body>
+</html>

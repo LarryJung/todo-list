@@ -13,7 +13,7 @@ public class HomeController {
     @GetMapping("/")
     public String indexPage() {
         log.info("helllo");
-        return "../templates/index.html";
+        return "index.html";
     }
 
 }

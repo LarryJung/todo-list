@@ -21,24 +21,24 @@ public class TodolistApplication {
 		SpringApplication.run(TodolistApplication.class, args);
 	}
 
-//	@Bean
-//	public CommandLineRunner demo(TaskRepository repository) {
-//		return (args) -> {
-//			// registerTask a couple of customers
-//			Task chores = Task.of("집안일");
-//			Task laundry = Task.of("빨래");
-//			Task cleaning = Task.of("청소");
-//			Task cleaningRoom = Task.of("방청소");
-//
-//			chores.addSubTask(laundry);
-//			chores.addSubTask(cleaning);
-//			chores.addSubTask(cleaningRoom);
-//			cleaning.addSubTask(cleaningRoom);
-//
-//			repository.save(chores);
-//			repository.save(laundry);
-//			repository.save(cleaning);
-//			repository.save(cleaningRoom);
-//		};
-//	}
+	@Bean
+	public CommandLineRunner demo(TaskRepository repository) {
+		return (args) -> {
+			// registerTask a couple of customers
+			Task chores = Task.of("집안일");
+			Task laundry = Task.of("빨래");
+			Task cleaning = Task.of("청소");
+			Task cleaningRoom = Task.of("방청소");
+
+			chores.addSubTask(laundry);
+			chores.addSubTask(cleaning);
+			chores.addSubTask(cleaningRoom);
+			cleaning.addSubTask(cleaningRoom);
+
+			repository.save(chores);
+			repository.save(laundry);
+			repository.save(cleaning);
+			repository.save(cleaningRoom);
+		};
+	}
 }

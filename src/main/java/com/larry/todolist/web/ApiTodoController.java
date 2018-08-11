@@ -3,6 +3,7 @@ package com.larry.todolist.web;
 import com.larry.todolist.domain.Task;
 import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
+import com.larry.todolist.dto.responseDto.IdTodoPair;
 import com.larry.todolist.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/api/tasks")
 @Controller
@@ -62,8 +64,20 @@ public class ApiTodoController {
                 .body(updatedTask);
     }
 
+    @GetMapping("/autoComplete")
+    public ResponseEntity<List<Task>> autoComplete(@RequestParam String candidateParam) {
+        log.info("candidata param : {}", candidateParam);
+        List<Task> canditates = taskService.findCandidatesByTodo(candidateParam);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(canditates);
+    }
 
-
+    @GetMapping("/referenceList")
+    public ResponseEntity<List<IdTodoPair>> findAll() {
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(taskService.findAllIdAndTodo());
+    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.larry.todolist.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import com.larry.todolist.dto.responseDto.IdTodoPair;
 import com.larry.todolist.exceptionHandle.CannotCompleteException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -102,6 +103,10 @@ public class Task {
     public Task updateTodo(String todo) {
         this.todo = todo;
         return this;
+    }
+
+    public IdTodoPair toIdTodoPairDto() {
+        return new IdTodoPair(id, todo);
     }
 
     @Override
