@@ -2,7 +2,6 @@ package com.larry.todolist;
 
 import com.larry.todolist.domain.Task;
 import com.larry.todolist.repository.TaskRepository;
-import com.larry.todolist.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

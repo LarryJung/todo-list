@@ -1,199 +1,199 @@
-/* Include the padding and border in an element's total width and height */
-* {
-    box-sizing: border-box;
-}
+/*!* Include the padding and border in an element's total width and height *!*/
+/** {*/
+    /*box-sizing: border-box;*/
+    /*padding: 0px;*/
+    /*margin: 0px;*/
+/*}*/
 
-#todoListDiv {
+/*#todoListDiv {*/
+    /*!*background-color: #bce8f1;*!*/
+    /*padding: 0px 10px;*/
+    /*!*color: white;*!*/
+    /*text-align: center;*/
+/*}*/
+
+/*!* Remove margins and padding from the list *!*/
+/*#todoList {*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+    /*list-style: none;*/
+/*}*/
+
+/*!* Style the list items *!*/
+/*#todoList li {*/
+    /*cursor: pointer;*/
+    /*position: relative;*/
+    /*padding: 12px 8px 12px 40px;*/
+    /*background: #eee;*/
+    /*font-size: 18px;*/
+    /*transition: 0.2s;*/
+
+    /*!* make the list items unselectable *!*/
+    /*!*-webkit-user-select: none;*!*/
+    /*!*-moz-user-select: none;*!*/
+    /*!*-ms-user-select: none;*!*/
+    /*!*user-select: none;*!*/
+/*}*/
+
+/*!* Set all odd list items to a different color (zebra-stripes) *!*/
+/*#todoList li:nth-child(odd) {*/
+    /*background: #f9f9f9;*/
+/*}*/
+
+/*!* Darker background-color on hover *!*/
+/*#todoList li:hover {*/
+    /*background: #ddd;*/
+/*}*/
+
+/*!* When clicked on, add a background color and strike out text *!*/
+/*#todoList li.checked {*/
+    /*background: #888;*/
+    /*color: #fff;*/
+    /*!*text-decoration: line-through;*!*/
+/*}*/
+
+/*!* Add a "checked" mark when clicked on *!*/
+/*#todoList li.checked::before {*/
+    /*content: '';*/
+    /*position: absolute;*/
+    /*border-color: #fff;*/
+    /*border-style: solid;*/
+    /*border-width: 0 2px 2px 0;*/
+    /*top: 13px;*/
+    /*left: 16px;*/
+    /*transform: rotate(45deg);*/
+    /*height: 15px;*/
+    /*width: 7px;*/
+/*}*/
+
+/*!*========================= done list ===========================*!*/
+/*#doneListDiv {*/
+    /*!*background-color: #bce8f1;*!*/
+    /*padding: 0px 10px;*/
+    /*!*color: white;*!*/
+    /*text-align: center;*/
+/*}*/
+
+/*#doneList {*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+    /*list-style: none;*/
+/*}*/
+
+/*!* Style the list items *!*/
+/*#doneList li {*/
+    /*cursor: pointer;*/
+    /*position: relative;*/
+    /*padding: 12px 8px 12px 40px;*/
+    /*background: #eee;*/
+    /*font-size: 18px;*/
+    /*transition: 0.2s;*/
+
+    /*!* make the list items unselectable *!*/
+    /*!*-webkit-user-select: none;*!*/
+    /*!*-moz-user-select: none;*!*/
+    /*!*-ms-user-select: none;*!*/
+    /*!*user-select: none;*!*/
+/*}*/
+
+/*!* Set all odd list items to a different color (zebra-stripes) *!*/
+/*#doneList li:nth-child(odd) {*/
+    /*background: #f9f9f9;*/
+/*}*/
+
+/*!* Darker background-color on hover *!*/
+/*#doneList li:hover {*/
+    /*background: #ddd;*/
+/*}*/
+
+/*!* When clicked on, add a background color and strike out text *!*/
+/*#doneList li.checked {*/
+    /*background: #888;*/
+    /*color: #fff;*/
+    /*!*text-decoration: line-through;*!*/
+/*}*/
+
+/*!* Add a "checked" mark when clicked on *!*/
+/*#doneList li.checked::before {*/
+    /*content: '';*/
+    /*position: absolute;*/
+    /*border-color: #fff;*/
+    /*border-style: solid;*/
+    /*border-width: 0 2px 2px 0;*/
+    /*top: 13px;*/
+    /*left: 16px;*/
+    /*transform: rotate(45deg);*/
+    /*height: 15px;*/
+    /*width: 7px;*/
+/*}*/
+/*!*============================================================*!*/
+
+/*!* Style the close button *!*/
+/*.close {*/
+    /*position: absolute;*/
+    /*right: 0;*/
+    /*top: 0;*/
+    /*padding: 12px 16px 12px 16px;*/
+/*}*/
+
+/*.close:hover {*/
+    /*background-color: #f44336;*/
+    /*color: white;*/
+/*}*/
+
+/*.btn {*/
+    /*position: relative;*/
+    /*right: 0;*/
+    /*top: 0;*/
+    /*padding: 12px 16px 12px 16px;*/
+/*}*/
+/*!* Style the header *!*/
+/*.header {*/
     /*background-color: #bce8f1;*/
-    padding: 0px 10px;
-    /*color: white;*/
-    text-align: center;
-}
+    /*padding: 30px 40px;*/
+    /*!*color: white;*!*/
+    /*text-align: center;*/
+/*}*/
 
-/* Remove margins and padding from the list */
-#todoList {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
+/*!* Clear floats after the header *!*/
+/*.header:after {*/
+    /*content: "";*/
+    /*display: table;*/
+    /*clear: both;*/
+/*}*/
 
-/* Style the list items */
-#todoList li {
-    cursor: pointer;
-    position: relative;
-    padding: 12px 8px 12px 40px;
-    background: #eee;
-    font-size: 18px;
-    transition: 0.2s;
+ /*!*Style the input*!*/
+/*input {*/
+    /*margin: 15px;*/
+    /*border: none;*/
+    /*border-radius: 0;*/
+    /*width: 65%;*/
+    /*padding: 8px;*/
+    /*!*float: left;*!*/
+    /*font-size: 16px;*/
+/*}*/
 
-    /* make the list items unselectable */
-    /*-webkit-user-select: none;*/
-    /*-moz-user-select: none;*/
-    /*-ms-user-select: none;*/
-    /*user-select: none;*/
-}
+ /*!*잘 보면 75% 25% = 100% 이다*!*/
+ /*!*Style the "Add" button*!*/
+/*.addBtn {*/
+    /*margin: 0px;*/
+    /*padding: 0px;*/
+    /*width: 40%;*/
+    /*background: #d9d9d9;*/
+    /*color: #555;*/
+    /*!*float: outside;*!*/
+    /*text-align: center;*/
+    /*font-size: 16px;*/
+    /*cursor: pointer;*/
+    /*transition: 0.3s;*/
+    /*border-radius: 0;*/
+/*}*/
 
-/* Set all odd list items to a different color (zebra-stripes) */
-#todoList li:nth-child(odd) {
-    background: #f9f9f9;
-}
+/*.addBtn:hover {*/
+    /*background-color: #bbb;*/
+/*}*/
 
-/* Darker background-color on hover */
-#todoList li:hover {
-    background: #ddd;
-}
-
-/* When clicked on, add a background color and strike out text */
-#todoList li.checked {
-    background: #888;
-    color: #fff;
-    /*text-decoration: line-through;*/
-}
-
-/* Add a "checked" mark when clicked on */
-#todoList li.checked::before {
-    content: '';
-    position: absolute;
-    border-color: #fff;
-    border-style: solid;
-    border-width: 0 2px 2px 0;
-    top: 13px;
-    left: 16px;
-    transform: rotate(45deg);
-    height: 15px;
-    width: 7px;
-}
-
-/*========================= done list ===========================*/
-#doneListDiv {
-    /*background-color: #bce8f1;*/
-    padding: 0px 10px;
-    /*color: white;*/
-    text-align: center;
-}
-
-#doneList {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-/* Style the list items */
-#doneList li {
-    cursor: pointer;
-    position: relative;
-    padding: 12px 8px 12px 40px;
-    background: #eee;
-    font-size: 18px;
-    transition: 0.2s;
-
-    /* make the list items unselectable */
-    /*-webkit-user-select: none;*/
-    /*-moz-user-select: none;*/
-    /*-ms-user-select: none;*/
-    /*user-select: none;*/
-}
-
-/* Set all odd list items to a different color (zebra-stripes) */
-#doneList li:nth-child(odd) {
-    background: #f9f9f9;
-}
-
-/* Darker background-color on hover */
-#doneList li:hover {
-    background: #ddd;
-}
-
-/* When clicked on, add a background color and strike out text */
-#doneList li.checked {
-    background: #888;
-    color: #fff;
-    /*text-decoration: line-through;*/
-}
-
-/* Add a "checked" mark when clicked on */
-#doneList li.checked::before {
-    content: '';
-    position: absolute;
-    border-color: #fff;
-    border-style: solid;
-    border-width: 0 2px 2px 0;
-    top: 13px;
-    left: 16px;
-    transform: rotate(45deg);
-    height: 15px;
-    width: 7px;
-}
-/*============================================================*/
-
-/* Style the close button */
-.close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 12px 16px 12px 16px;
-}
-
-.close:hover {
-    background-color: #f44336;
-    color: white;
-}
-
-.btn {
-    position: relative;
-    right: 0;
-    top: 0;
-    padding: 12px 16px 12px 16px;
-}
-/* Style the header */
-.header {
-    background-color: #bce8f1;
-    padding: 30px 40px;
-    /*color: white;*/
-    text-align: center;
-}
-
-/* Clear floats after the header */
-.header:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
- /*Style the input*/
-input {
-    margin: 15px;
-    border: none;
-    border-radius: 0;
-    width: 65%;
-    padding: 8px;
-    /*float: left;*/
-    font-size: 16px;
-}
-
- /*잘 보면 75% 25% = 100% 이다*/
- /*Style the "Add" button*/
-.addBtn {
-    margin: 30px;
-    padding: 20px;
-    width: 40%;
-    background: #d9d9d9;
-    color: #555;
-    /*float: outside;*/
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 0;
-}
-
-.addBtn:hover {
-    background-color: #bbb;
-}
-
-.nopadding {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-/*=============================== Autocomplete==============================*/
+/*.nopadding {*/
+    /*padding: 0 !important;*/
+    /*margin: 0 !important;*/
+/*}*/
