@@ -84,7 +84,24 @@ $(document).ready(function () {
 });
 
 $(function () {
-    var basic = $('#basic');
+    var basic = $('#subTasksInput');
+    basic.keydown(function () {
+        basic.magicsearch({
+            dataSource: dataSource,
+            fields: ['id', 'todo'],
+            id: 'id',
+            format: '%id% · %todo%',
+            multiple: true,
+            multiField: 'todo',
+            multiStyle: {
+                space: 5,
+                width: 80
+            }
+        });
+    });
+});
+$(function () {
+    var basic = $('#masterTasksInput');
     basic.keydown(function () {
         basic.magicsearch({
             dataSource: dataSource,
