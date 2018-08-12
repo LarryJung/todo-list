@@ -1,8 +1,10 @@
 package com.larry.todolist.service;
 
 import com.larry.todolist.domain.*;
+import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
 import com.larry.todolist.dto.requestDto.UpdateDto;
+import com.larry.todolist.dto.responseDto.ReferenceShowDto;
 import com.larry.todolist.repository.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -72,15 +75,6 @@ public class TaskService {
         return findById(presentTaskId).completeTask();
     }
 
-//    public List<Task> findCandidatesByTodo(String param) {
-//        return taskRepository.findAllByTodoContains(param);
-//    }
-//
-//    public List<IdTodoPair> findAllIdAndTodo() {
-//        return findAll().stream().map(t -> t.toIdTodoPairDto()).collect(Collectors.toList());
-//
-//    }
-
     public List<Task> findAll(boolean complete) {
         if (complete) {
             return taskRepository.findAllByCompletedDateIsNotNull();
@@ -91,5 +85,13 @@ public class TaskService {
     @Transactional
     public Task update(UpdateDto updateDto) {
         return findById(updateDto.getPk()).updateTodo(updateDto.getValue());
+    }
+
+
+    public ReferenceShowDto findRelations(Long presentTaskId) {
+        ReferenceShowDto referenceShowDto = new ReferenceShowDto();
+        relationRepository.findAllBySubId(presentTaskId).forEach(t -> referenceShowDto.addMaster(t.getMaster()));
+        relationRepository.findAllByMasterId(presentTaskId).forEach(t -> referenceShowDto.addSub(t.getSub()));
+        return referenceShowDto;
     }
 }

@@ -72,8 +72,16 @@ function showDoneList() {
     });
 }
 
-$.fn.editable.defaults.ajaxOptions = {type: "PUT"};
-
+$(document).on("click", "#todo-refs-btn", function (e) {
+    e.preventDefault();
+    var id = $('td:first', $(this).parents('tr')).text();
+    $.ajax({
+        url: "/api/tasks/"+id+"/references",
+        dataType: 'json'
+    }).then(function (data) {
+        console.log(data);
+    });
+});
 
 $(document).on("click", "#todo-complete-btn", function (e) {
     e.preventDefault();
@@ -92,7 +100,7 @@ $(document).on("click", "#todo-complete-btn", function (e) {
     })
 });
 
-
+$.fn.editable.defaults.ajaxOptions = {type: "PUT"};
 $(document).on("click", "#edit-todo", function (e) {
     e.preventDefault();
     var todo = $(this);

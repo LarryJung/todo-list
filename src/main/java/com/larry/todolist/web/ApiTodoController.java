@@ -1,10 +1,12 @@
 package com.larry.todolist.web;
 
+import com.larry.todolist.domain.Relation;
 import com.larry.todolist.domain.Task;
 import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
 import com.larry.todolist.dto.requestDto.UpdateDto;
 import com.larry.todolist.dto.responseDto.IdTodoPair;
+import com.larry.todolist.dto.responseDto.ReferenceShowDto;
 import com.larry.todolist.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +73,13 @@ public class ApiTodoController {
                 .body(taskService.findAll(complete));
     }
 
+    @GetMapping("{presentTaskId}/references")
+    public ResponseEntity<ReferenceShowDto> findRelations(@PathVariable Long presentTaskId) {
+        log.info("show reference : {}", presentTaskId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(taskService.findRelations(presentTaskId));
+    }
 
 
 }
