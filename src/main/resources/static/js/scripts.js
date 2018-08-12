@@ -3,10 +3,10 @@ $(document).on("click", "#addBtn", function (e) {
     var masterTasksDto;
     var subTasksDto;
     if ($('#masterTasks').val()) {
-        masterTasksDto = {taskType : 'MASTER', referenceTasks: $('#masterTasks').val().split(",")};
+        masterTasksDto = {taskType: 'MASTER', referenceTasks: $('#masterTasks').val().split(",")};
     }
-    if($('#subTasks').val()) {
-      subTasksDto = {taskType : 'SUB', referenceTasks: $('#subTasks').val().split(",")};
+    if ($('#subTasks').val()) {
+        subTasksDto = {taskType: 'SUB', referenceTasks: $('#subTasks').val().split(",")};
     }
     var taskRequestDto = {todo: $('#todo').val(), masterTasksDto: masterTasksDto, subTasksDto: subTasksDto};
     console.log(taskRequestDto);
@@ -23,7 +23,7 @@ $(document).on("click", "#addBtn", function (e) {
         },
         error: function (data) {
             console.log(data);
-            alert(data)
+            alert(JSON.stringify(data, null, '\t'));
         }
     });
 });
@@ -72,14 +72,23 @@ function showDoneList() {
     });
 }
 
-$(document).on("click", "#todo-refs-btn", function (e) {
+$(document).on("click", "#closeModal", function (e) {
     e.preventDefault();
+    $(this).dialog("remove");
+});
+
+$(document).on('click', "#todo-refs-btn", function () {
+    $('#masterTasks').multiselect();
+    $('#subTasks').multiselect();
+    var btn = $(this);
     var id = $('td:first', $(this).parents('tr')).text();
     $.ajax({
-        url: "/api/tasks/"+id+"/references",
+        url: "/api/tasks/" + id + "/references",
         dataType: 'json'
     }).then(function (data) {
-        console.log(data);
+        alert(JSON.stringify(data, null, '\t'));
+        $('#masterSelect').val('');
+        $('#subSelect').val('');
     });
 });
 
@@ -95,7 +104,7 @@ $(document).on("click", "#todo-complete-btn", function (e) {
         },
         error: function (data) {
             console.log(data);
-            alert(data)
+            alert(JSON.stringify(data, null, '\t'));
         }
     })
 });
@@ -110,7 +119,7 @@ $(document).on("click", "#edit-todo", function (e) {
         pk: pk,
         url: '/api/tasks/' + pk,
         title: 'Modify Todo',
-        success: function(response, newValue) {
+        success: function (response, newValue) {
             console.log(response);
             $(this).parents('tr').find('td:eq(3)').html(response.modifiedDate);
         }
