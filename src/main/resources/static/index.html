@@ -3,12 +3,13 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
+    <script src="/js/link/handlebars-v4.0.11.js"></script>
     <title>SLiPP Java Web Programming</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
 </head>
 <body>
 <br><br>
@@ -49,13 +50,13 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-12">
-        <div class="col-lg-6" id="todoList">
+    <div class="col-lg-12 nopadding">
+        <div class="col-lg-6 nopadding" id="todoList">
             <div class="row text-center">
                 <h3>해야할 일들</h3>
             </div>
-            <div class="container-fluid">
-                <table class="table table-bordered text-center" id="todoListTable">
+            <div class="container-fluid" id="todoListTable">
+                <table class="table table-bordered text-center">
                     <thead>
                     <th style="text-align:center">Id</th>
                     <th style="text-align:center">할 일</th>
@@ -65,18 +66,18 @@
                     <th style="text-align:center">완료</th>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td id="todo-id">1</td>
-                        <td id="todo-todo" style="text-align:center">청소</td>
-                        <td class="time" id="todo-createdDate" style="text-align:center">2018-08-10</td>
-                        <td class="time" id="todo-modifiedDate" style="text-align:center">2018-08-11</td>
-                        <td id="todo-refs">
-                            <button type="button" class="btn btn-danger btn-sm" id="todo-refs-btn">Refs</button>
-                        </td>
-                        <td id="todo-complete">
-                            <button type="button" class="btn btn-danger btn-sm" id="todo-complete-btn">완료</button>
-                        </td>
-                    </tr>
+                    <!--<tr>-->
+                        <!--<td id="todo-id">1</td>-->
+                        <!--<td id="todo-todo" style="text-align:center">청소</td>-->
+                        <!--<td class="time" id="todo-createdDate" style="text-align:center">2018-08-10</td>-->
+                        <!--<td class="time" id="todo-modifiedDate" style="text-align:center">2018-08-11</td>-->
+                        <!--<td id="todo-refs">-->
+                            <!--<button type="button" class="btn btn-danger btn-sm" id="todo-refs-btn">Refs</button>-->
+                        <!--</td>-->
+                        <!--<td id="todo-complete">-->
+                            <!--<button type="button" class="btn btn-danger btn-sm" id="todo-complete-btn">완료</button>-->
+                        <!--</td>-->
+                    <!--</tr>-->
                     </tbody>
                 </table>
             </div>
@@ -95,12 +96,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6" id="doneList">
-            <div class="row text-center">
+        <div class="col-lg-6 nopadding" id="doneList">
+            <div class="row text-center nopadding">
                 <h3>완료된 일들</h3>
             </div>
-            <div class="container-fluid">
-                <table class="table table-bordered text-center" id="doneListTable">
+            <div class="container-fluid" id="doneListTable">
+                <table class="table table-bordered text-center">
                     <thead>
                     <th style="text-align:center">Id</th>
                     <th style="text-align:center">할 일</th>
@@ -143,106 +144,57 @@
     </div>
 </div>
 
-<!--<div class="container">-->
-<!--<div id="myDIV" class="header">-->
-<!--<h2>할 일 목록 페이지</h2>-->
-<!--<div>-->
-<!--<form>-->
-<!--<div class="row">-->
-<!--<input type="text" id="myInput" placeholder="Title..." onfocusout="checkUnique()">-->
-<!--</div>-->
-<!--<div class="magicsearch-wrapper" data-belong="magicsearch"-->
-<!--style="width: 350px; display: inline-block; float: none; margin: 0px;" data-index="1"><input-->
-<!--class="magicsearch multi" id="subTasksInput" placeholder="sub tasks..."-->
-<!--data-placeholder="sub tasks..."-->
-<!--data-id="" style="margin: 0px; box-sizing: border-box; width: 350px; height: 56px;">-->
-<!--<div class="magicsearch-box" style="top: 56px;"></div>-->
-<!--<div class="multi-items" style="top: 8px; lef₩t: 8px; bottom: 8px; right: 8px;"></div>-->
-<!--</div>-->
-<!--<div class="magicsearch-wrapper" data-belong="magicsearch"-->
-<!--style="width: 350px; display: inline-block; float: none; margin: 0px;" data-index="1"><input-->
-<!--class="magicsearch multi" id="masterTasksInput" placeholder="master tasks..."-->
-<!--data-placeholder="master tasks..."-->
-<!--data-id="" style="margin: 0px; box-sizing: border-box; width: 350px; height: 56px;">-->
-<!--<div class="magicsearch-box" style="top: 56px;"></div>-->
-<!--<div class="multi-items" id="subItems" style="top: 8px; lef₩t: 8px; bottom: 8px; right: 8px;"></div>-->
-<!--</div>-->
-<!--<div class="row" style="height: 40px">-->
-<!--<a onclick="newElement()" class="addBtn">Add</a>-->
-<!--</div>-->
-<!--</form>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="container col-lg-6 nopadding">-->
-<!--<div class="row text-center">-->
-<!--<h2>Todos</h2>-->
-<!--</div>-->
-<!--<div id="todoListDiv" id="todoListId">-->
-<!--<ul id="todoList">-->
-<!--<li>Hit the gym</li>-->
-<!--<li class="checked">Pay bills</li>-->
-<!--<li>Meet George</li>-->
-<!--<li>Buy eggs</li>-->
-<!--<li>Read a book</li>-->
-<!--</ul>-->
-<!--</div>-->
-<!--&lt;!&ndash;Pagination&ndash;&gt;-->
-<!--<div>-->
-<!--<nav aria-label="Page navigation example">-->
-<!--<ul class="pagination justify-content-center">-->
-<!--<li class="page-item disabled">-->
-<!--<a class="page-link" href="#" tabindex="-1">Previous</a>-->
-<!--</li>-->
-<!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
-<!--<li class="page-item"><a class="page-link" href="#">2</a></li>-->
-<!--<li class="page-item"><a class="page-link" href="#">3</a></li>-->
-<!--<li class="page-item"><a class="page-link" href="#">4</a></li>-->
-<!--<li class="page-item"><a class="page-link" href="#">5</a></li>-->
-<!--<li class="page-item">-->
-<!--<a class="page-link" href="#">Next</a>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</nav>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="container col-lg-6 nopadding">-->
-<!--<div class="row text-center">-->
-<!--<h2>Dones</h2>-->
-<!--</div>-->
-<!--<div id="doneListDiv">-->
-<!--<ul id="doneList">-->
-<!--<li>밥먹기</li>-->
-<!--<li>숨쉬기</li>-->
-<!--</ul>-->
-<!--</div>-->
-<!--&lt;!&ndash;Pagination&ndash;&gt;-->
-<!--<div>-->
-<!--<nav aria-label="Page navigation example">-->
-<!--<ul class="pagination justify-content-center">-->
-<!--<li class="page-item disabled">-->
-<!--<a class="page-link" href="#" tabindex="-1">Previous</a>-->
-<!--</li>-->
-<!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
-<!--<li class="page-item"><a class="page-link" href="#">2</a></li>-->
-<!--<li class="page-item"><a class="page-link" href="#">3</a></li>-->
-<!--<li class="page-item"><a class="page-link" href="#">4</a></li>-->
-<!--<li class="page-item"><a class="page-link" href="#">5</a></li>-->
-<!--<li class="page-item">-->
-<!--<a class="page-link" href="#">Next</a>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</nav>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
+<script id="todoList-template" type="text/x-handlebars-template">
+    {{#each .}}
+    <tr id="template-row" class="nopadding">
+        <td id="todo-id">{{id}}</td>
+        <td id="todo-todo" style="text-align:center"><a id="edit-todo">{{todo}}</a></td>
+        <td class="time" id="todo-createdDate" style="text-align:center">{{createdDate}}</td>
+        <td class="time" id="todo-modifiedDate" style="text-align:center">{{modifiedDate}}</td>
+        <td id="todo-refs">
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" id="todo-refs-btn">Refs</button>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">"{{todo}}"의 참조 목록</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Master : </strong> {{master_tasks}}</p>
+                            <p><strong>Sub : </strong> {{sub_tasks}}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </td>
+        <td id="todo-complete">
+            <button type="button" class="btn btn-danger btn-sm" id="todo-complete-btn">완료</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
 
-<script src="js/jquery-2.2.0.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+<!--<script src="js/jquery-2.2.0.min.js"></script>-->
+<!--<script src="js/bootstrap.min.js"></script>-->
 <script src="js/scripts.js"></script>
-<script src="js/jquery.magicsearch.js"></script>
 <link href="css/normalize.css" rel="stylesheet">
 <!--<link href="css/style.css" rel="stylesheet">-->
-<link href="css/jquery.magicsearch.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/index.css">
 </body>
 </html>

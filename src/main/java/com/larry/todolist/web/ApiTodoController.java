@@ -73,11 +73,12 @@ public class ApiTodoController {
                 .body(canditates);
     }
 
-    @GetMapping("/referenceList")
-    public ResponseEntity<List<IdTodoPair>> findAll() {
+    @GetMapping("")
+    public ResponseEntity<List<Task>> findAllByComplete(@RequestParam boolean complete) {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(taskService.findAllIdAndTodo());
+                .body(taskService.findAll(complete));
     }
+
 
 
 }

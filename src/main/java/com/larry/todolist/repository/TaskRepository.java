@@ -10,4 +10,6 @@ public interface TaskRepository extends JpaRepository<Task, Long>{
 
     Optional<Task> findByTodo(String Todo);
     List<Task> findAllByTodoContains(String todo);
+    List<Task> findAllByCompletedDateIsNotNull();
+    List<Task> findAllByCompletedDateIsNull();
 }

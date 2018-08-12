@@ -79,4 +79,11 @@ public class TaskService {
         return findAll().stream().map(t -> t.toIdTodoPairDto()).collect(Collectors.toList());
 
     }
+
+    public List<Task> findAll(boolean complete) {
+        if (complete) {
+            return taskRepository.findAllByCompletedDateIsNotNull();
+        }
+        return taskRepository.findAllByCompletedDateIsNull();
+    }
 }

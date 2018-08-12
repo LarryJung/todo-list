@@ -193,7 +193,7 @@
     /*background-color: #bbb;*/
 /*}*/
 
-/*.nopadding {*/
-    /*padding: 0 !important;*/
-    /*margin: 0 !important;*/
-/*}*/
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
