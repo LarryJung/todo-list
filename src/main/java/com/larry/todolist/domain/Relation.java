@@ -1,5 +1,6 @@
 package com.larry.todolist.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,5 +35,13 @@ public class Relation extends AbstractEntity{
 			return true;
 		}
 		return sub.wasCompleted();
+	}
+
+	@Override
+	public String toString() {
+		return "Relation{" +
+				"master=" + master.getTodo() +
+				", sub=" + sub.getTodo() +
+				'}';
 	}
 }

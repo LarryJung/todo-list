@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
@@ -25,10 +26,10 @@ public class TaskTest {
         Relation relation3 = Relation.masterAndSub(chores, cleaningRoom);
         Relation relation4 = Relation.masterAndSub(cleaning, cleaningRoom);
 
-        chores.registerRelations(new Relations(Arrays.asList(relation1, relation2, relation3)));
-        laundry.registerRelations(new Relations(Arrays.asList(relation1)));
-        cleaning.registerRelations(new Relations(Arrays.asList(relation2, relation4)));
-        cleaningRoom.registerRelations(new Relations(Arrays.asList(relation3, relation4)));
+        chores.registerRelations(new Relations( new HashSet<>(Arrays.asList(relation1, relation2, relation3))));
+        laundry.registerRelations(new Relations(new HashSet<>(Arrays.asList(relation1))));
+        cleaning.registerRelations(new Relations(new HashSet<>(Arrays.asList(relation2, relation4))));
+        cleaningRoom.registerRelations(new Relations(new HashSet<>(Arrays.asList(relation3, relation4))));
     }
 
     @Test(expected = CannotCompleteException.class)

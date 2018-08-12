@@ -24,28 +24,28 @@ public class ApiTodoController {
 
     @Resource(name = "taskService")
     private TaskService taskService;
-//
-//    @PostMapping("")
-//    public ResponseEntity<Task> registerTask(@RequestBody TaskRequestDto dto) {
-//        Task newTask = taskService.registerTask(dto);
-//        log.info("new Task : {}", newTask);
-//        URI url = URI.create(String.format("/api/tasks/%d", newTask.getId()));
-//        log.info("created task url : {}", url);
-//        return ResponseEntity.created(url)
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(newTask);
-//    }
-//
-//    @PostMapping("/{presentTaskId}")
-//    public ResponseEntity<Task> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
-//        log.info("참조 거는 기능 수행!!");
-//        Task presentTask = taskService.findById(presentTaskId);
-//        Task updatedTask = taskService.registerReferences(presentTask, dto);
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(updatedTask);
-//    }
-//
+
+    @PostMapping("")
+    public ResponseEntity<Task> registerTask(@RequestBody TaskRequestDto dto) {
+        Task newTask = taskService.registerTask(dto);
+        log.info("new Task : {}", newTask);
+        URI url = URI.create(String.format("/api/tasks/%d", newTask.getId()));
+        log.info("created task url : {}", url);
+        return ResponseEntity.created(url)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(newTask);
+    }
+
+    @PostMapping("/{presentTaskId}")
+    public ResponseEntity<Task> registerReferences(@PathVariable Long presentTaskId, @RequestBody ReferenceTaskDto dto) {
+        log.info("참조 거는 기능 수행!!");
+        Task presentTask = taskService.findById(presentTaskId);
+        Task updatedTask = taskService.registerTask(presentTask, TaskRequestDto.of(dto));
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(updatedTask);
+    }
+
 //    @PutMapping("/{presentTaskId}")
 //    public ResponseEntity<Task> updateTaskContent(@PathVariable Long presentTaskId, @RequestBody String todo) {
 //        Task presentTask = taskService.findById(presentTaskId);

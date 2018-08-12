@@ -23,16 +23,9 @@ public class Task extends AbstractEntity{
     @Column(name = "TODO", nullable = false, unique = true)
     private String todo;
 
+    @JsonIgnore
     @Embedded
     private Relations relations;
-
-    public static Task of(String todo) {
-        return new Task(todo);
-    }
-
-    public static Task of(Long id, String todo) {
-        return new Task(id, todo);
-    }
 
     private Task(String todo) {
         this.todo = todo;
@@ -41,6 +34,31 @@ public class Task extends AbstractEntity{
     private Task(Long id, String todo) {
         super(id);
         this.todo = todo;
+    }
+
+    private Task(String todo, Relations relations) {
+        this.todo = todo;
+        this.relations = relations;
+    }
+
+    public static Task of(String todo) {
+        return new Task(todo);
+    }
+
+    public static Task of(String todo, Relations relations) {
+        return new Task(todo, relations);
+    }
+
+    public static Task of(Long id, String todo) {
+        return new Task(id, todo);
+    }
+
+    public Task registerRelation(Relation relation) {
+        if (relations == null) {
+            this.relations = new Relations();
+        }
+        this.relations = relations.addRelation(relation);
+        return this;
     }
 
     public Task registerRelations(Relations relations) {
@@ -105,7 +123,7 @@ public class Task extends AbstractEntity{
 //
 //        return Objects.hash(id, createdDate, modifiedDate, completedDate, todo, subTasks, masterTasks);
 //    }
-//
+
 //    @Override
 //    public String toString() {
 //        return "Task{" +

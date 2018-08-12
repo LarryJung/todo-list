@@ -3,6 +3,7 @@ package com.larry.todolist.domain;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -15,7 +16,7 @@ public class RelationsTest {
     @Test
     public void allComplateTest() {
         Relation relation1 = Relation.masterAndSub(chores, laundry);
-        Relations relations1= new Relations(Arrays.asList(relation1));
+        Relations relations1= new Relations(new HashSet<>(Arrays.asList(relation1)));
         assertFalse(relations1.isSubTaskAllCompleted(chores));
         laundry.completeTask();
         assertTrue(relation1.isSubTaskCompleted(chores));

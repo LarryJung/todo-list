@@ -1,7 +1,13 @@
 $(document).on("click", "#addBtn", function (e) {
     e.preventDefault();
-    var masterTasksDto = {taskType : 'MASTER', referenceTasks: $('#masterTasks').val().split(",")};
-    var subTasksDto = {taskType : 'SUB', referenceTasks: $('#subTasks').val().split(",")};
+    var masterTasksDto;
+    var subTasksDto;
+    if ($('#masterTasks').val()) {
+        masterTasksDto = {taskType : 'MASTER', referenceTasks: $('#masterTasks').val().split(",")};
+    }
+    if($('#subTasks').val()) {
+      subTasksDto = {taskType : 'SUB', referenceTasks: $('#subTasks').val().split(",")};
+    }
     var taskRequestDto = {todo: $('#todo').val(), masterTasksDto: masterTasksDto, subTasksDto: subTasksDto};
     console.log(taskRequestDto);
     $.ajax({

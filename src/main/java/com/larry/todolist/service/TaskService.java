@@ -1,6 +1,6 @@
 package com.larry.todolist.service;
 
-import com.larry.todolist.domain.Task;
+import com.larry.todolist.domain.*;
 import com.larry.todolist.domain.support.TaskType;
 import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
@@ -12,9 +12,12 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +27,9 @@ public class TaskService {
 
     @Resource(name = "taskRepository")
     private TaskRepository taskRepository;
+
+    @Resource(name = "relationRepository")
+    private RelationRepository relationRepository;
 
     public List<Task> findAll() {
         return taskRepository.findAll();
@@ -36,30 +42,39 @@ public class TaskService {
     public Task findByTodo(String todo) {
         return taskRepository.findByTodo(todo).orElseThrow(EntityNotFoundException::new);
     }
-//
-//    public Task registerTask(TaskRequestDto dto) {
-//        Task afterRegisterMaster = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
-//        return registerReferences(afterRegisterMaster, dto.getSubTasksDto());
-//    }
 
-//    @Transactional
-//    public Task registerReferences(Task presentTask, ReferenceTaskDto references) {
-//        if (references == null) {
-//            log.info("reference is null");
-//            return save(presentTask);
-//        }
-//        if (references.getTaskType().equals(TaskType.SUB)) {
-//            Arrays.stream(references.getReferenceTasks()).forEach(r -> presentTask.addSubTask(findById(r)));
-//        }
-//        if (references.getTaskType().equals(TaskType.MASTER)) {
-//            Arrays.stream(references.getReferenceTasks()).forEach(r -> findById(r).addSubTask(presentTask));
-//        }
-//        return save(presentTask);
-//    }
-
-    private Task save(Task task) {
-        return taskRepository.save(task);
+    @Transactional
+    public Task registerTask(Task presentTask, TaskRequestDto dto) {
+        log.info("input dto : {}", dto);
+        List<IdRelation> newRelations = dto.makeIdRelations(presentTask.getId());
+        return registerReferences(presentTask, newRelations);
     }
+
+    @Transactional
+    public Task registerTask(TaskRequestDto dto) {
+        log.info("input dto : {}", dto);
+        Task newTask = taskRepository.save(dto.toEntity());
+        List<IdRelation> newRelations = dto.makeIdRelations(newTask.getId());
+        return registerReferences(newTask, newRelations);
+    }
+
+    public Task registerReferences(Task presentTask, List<IdRelation> idRelations) {
+        idRelations.forEach(this::checkRelation);
+        idRelations.forEach(r -> r.registerRelation(taskRepository, relationRepository));
+        return presentTask;
+    }
+
+    private void checkRelation(IdRelation r) {
+        relationRepository.findAllBySubId(r.getMasterId())
+                .forEach(ref -> relationRepository.findAllBySubId(ref.getMaster().getId())
+                        .forEach(rr -> {
+                            if (rr.getMaster().equals(findById(r.getSubId()))) {
+                                throw new RuntimeException();
+                            }
+                        }));
+    }
+
+
 //
 //    @Transactional
 //    public Task complete(Long presentTaskId) {
