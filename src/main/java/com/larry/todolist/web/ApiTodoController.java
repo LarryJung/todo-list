@@ -48,7 +48,6 @@ public class ApiTodoController {
 
     @PutMapping("/{presentTaskId}")
     public ResponseEntity<Task> updateTaskContent(@PathVariable Long presentTaskId, @RequestBody String todo) {
-        log.info("updated content : {}", todo);
         Task presentTask = taskService.findById(presentTaskId);
         Task updatedTask = taskService.update(presentTask, todo);
         return ResponseEntity.ok()
@@ -63,6 +62,15 @@ public class ApiTodoController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(updatedTask);
+    }
+
+    @GetMapping("/autoComplete")
+    public ResponseEntity<List<Task>> autoComplete(@RequestParam String candidateParam) {
+        log.info("candidata param : {}", candidateParam);
+        List<Task> canditates = taskService.findCandidatesByTodo(candidateParam);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(canditates);
     }
 
     @GetMapping("")
