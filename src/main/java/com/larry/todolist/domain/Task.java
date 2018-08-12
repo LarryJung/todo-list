@@ -1,6 +1,7 @@
 package com.larry.todolist.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import com.larry.todolist.exceptionHandle.CannotCompleteException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -41,6 +42,11 @@ public class Task extends AbstractEntity{
         super(id);
         this.todo = todo;
     }
+
+    public Task registerRelations(Relations relations) {
+        this.relations = relations;
+        return this;
+    }
 //
 //    public Task addSubTask(Task subTask) {
 //        subTasks = subTasks.addTask(subTask);
@@ -53,21 +59,23 @@ public class Task extends AbstractEntity{
 //        return this;
 //    }
 //
-//    public boolean wasCompleted() {
-//        return completedDate != null;
-//    }
-//
-//    public Task completeTask() {
-//        if (subTasks.isEmpty()) {
-//            this.completedDate = LocalDateTime.now();
-//            return this;
-//        }
-//        if (!subTasks.isAllCompleted()) {
-//            throw new CannotCompleteException(String.format("아직 끝나지 않은 일들이 있습니다. Id : %s", subTasks.getNotCompletedList()));
-//        }
-//        this.completedDate = LocalDateTime.now();
-//        return this;
-//    }
+
+    public boolean wasCompleted() {
+        return completedDate != null;
+    }
+
+
+    public Task completeTask() {
+        if (relations == null) {
+            this.completedDate = LocalDateTime.now();
+            return this;
+        }
+        if (!relations.isSubTaskAllCompleted(this)) {
+            throw new CannotCompleteException(String.format("아직 끝나지 않은 일들이 있습니다. Id : %s", relations.getNotCompletedSubTaskList()));
+        }
+        this.completedDate = LocalDateTime.now();
+        return this;
+    }
 //
 //    public Task updateTodo(String todo) {
 //        this.todo = todo;

@@ -15,11 +15,18 @@ public class Relations {
 	private List<Relation> relations = new ArrayList<>();
 
 	public Relations(List<Relation> relations) {
-		this.relations =relations;
+		this.relations = relations;
 	}
 
 	public List<Relation> getRelations() {
 		return relations;
 	}
 
+	public boolean isSubTaskAllCompleted(Task target) {
+		return relations.stream().allMatch(r -> r.isSubTaskCompleted(target));
+	}
+
+	public Object getNotCompletedSubTaskList() {
+		return null;
+	}
 }

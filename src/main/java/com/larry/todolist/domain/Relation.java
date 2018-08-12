@@ -20,9 +20,19 @@ public class Relation extends AbstractEntity{
 	@ManyToOne
 	private Task sub;
 
-	public Relation(Task master, Task sub) {
+	private Relation(Task master, Task sub) {
 		this.master = master;
 		this.sub = sub;
 	}
 
+	public static Relation masterAndSub(Task master, Task sub) {
+		return new Relation(master, sub);
+	}
+
+	public boolean isSubTaskCompleted(Task target) {
+		if (sub.equals(target)) {
+			return true;
+		}
+		return sub.wasCompleted();
+	}
 }

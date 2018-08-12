@@ -20,19 +20,15 @@ public class TaskTest {
 
     @Before
     public void setup() {
-        chores.addSubTask(laundry);
-        chores.addSubTask(cleaning);
-        chores.addSubTask(cleaningRoom);
-        cleaning.addSubTask(cleaningRoom);
-    }
+        Relation relation1 = Relation.masterAndSub(chores, laundry);
+        Relation relation2 = Relation.masterAndSub(chores, cleaning);
+        Relation relation3 = Relation.masterAndSub(chores, cleaningRoom);
+        Relation relation4 = Relation.masterAndSub(cleaning, cleaningRoom);
 
-    @Test
-    public void addReferenceTest() {
-        assertThat(chores.getSubTasks(), is(new References(Arrays.asList(laundry, cleaning, cleaningRoom))));
-        assertThat(laundry.getSubTasks(), is(new References()));
-        assertThat(cleaning.getSubTasks(), is(new References(Arrays.asList(cleaningRoom))));
-        assertThat(cleaningRoom.getSubTasks(), is(new References()));
-        assertThat(cleaningRoom.getMasterTasks(), is(new References(Arrays.asList(chores, cleaning))));
+        chores.registerRelations(new Relations(Arrays.asList(relation1, relation2, relation3)));
+        laundry.registerRelations(new Relations(Arrays.asList(relation1)));
+        cleaning.registerRelations(new Relations(Arrays.asList(relation2, relation4)));
+        cleaningRoom.registerRelations(new Relations(Arrays.asList(relation3, relation4)));
     }
 
     @Test(expected = CannotCompleteException.class)
