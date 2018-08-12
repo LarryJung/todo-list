@@ -51,7 +51,6 @@ public class Task {
     @JsonUnwrapped(prefix = "sub_")
     private References subTasks = new References();
 
-    // DB에 등록하지 않음.
     @Transient
     @JsonUnwrapped(prefix = "master_")
     private References masterTasks = new References();

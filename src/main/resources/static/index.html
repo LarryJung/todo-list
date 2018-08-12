@@ -67,16 +67,16 @@
                     </thead>
                     <tbody>
                     <!--<tr>-->
-                        <!--<td id="todo-id">1</td>-->
-                        <!--<td id="todo-todo" style="text-align:center">청소</td>-->
-                        <!--<td class="time" id="todo-createdDate" style="text-align:center">2018-08-10</td>-->
-                        <!--<td class="time" id="todo-modifiedDate" style="text-align:center">2018-08-11</td>-->
-                        <!--<td id="todo-refs">-->
-                            <!--<button type="button" class="btn btn-danger btn-sm" id="todo-refs-btn">Refs</button>-->
-                        <!--</td>-->
-                        <!--<td id="todo-complete">-->
-                            <!--<button type="button" class="btn btn-danger btn-sm" id="todo-complete-btn">완료</button>-->
-                        <!--</td>-->
+                    <!--<td id="todo-id">1</td>-->
+                    <!--<td id="todo-todo" style="text-align:center">청소</td>-->
+                    <!--<td class="time" id="todo-createdDate" style="text-align:center">2018-08-10</td>-->
+                    <!--<td class="time" id="todo-modifiedDate" style="text-align:center">2018-08-11</td>-->
+                    <!--<td id="todo-refs">-->
+                    <!--<button type="button" class="btn btn-danger btn-sm" id="todo-refs-btn">Refs</button>-->
+                    <!--</td>-->
+                    <!--<td id="todo-complete">-->
+                    <!--<button type="button" class="btn btn-danger btn-sm" id="todo-complete-btn">완료</button>-->
+                    <!--</td>-->
                     <!--</tr>-->
                     </tbody>
                 </table>
@@ -144,15 +144,29 @@
     </div>
 </div>
 
+<script id="modal-template" type="text/x-handlebars-template">
+    {{#each .}}
+    <p>{{id}} " - " {{todo}}</p>
+    {{/each}}
+</script>
+
 <script id="todoList-template" type="text/x-handlebars-template">
     {{#each .}}
     <tr id="template-row" class="nopadding">
         <td id="todo-id">{{id}}</td>
-        <td id="todo-todo" style="text-align:center"><a id="edit-todo">{{todo}}</a></td>
-        <td class="time" id="todo-createdDate" style="text-align:center">{{createdDate}}</td>
-        <td class="time" id="todo-modifiedDate" style="text-align:center">{{modifiedDate}}</td>
+        <td id="todo-todo" style="text-align:center">
+            <a id="edit-todo">{{todo}}</a>
+        </td>
+        <td class="time" id="todo-createdDate" style="text-align:center">
+            <a id="edit-createdDate">{{createdDate}}</a>
+        </td>
+        <td class="time" id="todo-modifiedDate" style="text-align:center">
+            <a id="edit-modifiedDate">{{modifiedDate}}</a>
+        </td>
         <td id="todo-refs">
-            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" id="todo-refs-btn">Refs</button>
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal"
+                    id="todo-refs-btn">Refs
+            </button>
             <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">
                 <div class="modal-dialog modal-sm">
@@ -161,7 +175,7 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">"{{todo}}"의 참조 목록</h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" id="modalBody">
                             <p><strong>Master : </strong> {{master_tasks}}</p>
                             <p><strong>Sub : </strong> {{sub_tasks}}</p>
                         </div>
@@ -180,16 +194,15 @@
     {{/each}}
 </script>
 
-
-
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
-
-<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
+      rel="stylesheet"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-
+<link href="css/bootstrap-datetimepicker.css" rel="stylesheet" type="tbootstrap-datetimepicker.cssext/css">
+<script src="js/bootstrap-datetimepicker.js"></script>
 <!--<script src="js/jquery-2.2.0.min.js"></script>-->
 <!--<script src="js/bootstrap.min.js"></script>-->
 <script src="js/scripts.js"></script>
