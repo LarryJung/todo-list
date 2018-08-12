@@ -40,7 +40,7 @@ public class References {
 //    public List<Long> getNotCompletedList() {
 //        return tasks.stream()
 //                .filter(r -> !r.wasCompleted())
-//                .map(Task::getId)
+//                .map(Task::getPk)
 //                .collect(Collectors.toList());
 //    }
 

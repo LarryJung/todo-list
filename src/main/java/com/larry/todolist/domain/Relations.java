@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Data
 @Embeddable
-@JsonIgnoreProperties({"createdDate", "modifiedDate", "id"})
+@JsonIgnoreProperties({"createdDate", "modifiedDate", "pk"})
 public class Relations {
 
 	@JsonUnwrapped

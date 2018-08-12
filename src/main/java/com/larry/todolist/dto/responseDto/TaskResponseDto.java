@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class TaskResponseDto {
 
-    @JsonProperty("id")
+    @JsonProperty("pk")
     private Long id;
 
     @JsonProperty("createdDate")

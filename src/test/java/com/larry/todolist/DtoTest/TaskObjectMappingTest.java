@@ -51,7 +51,7 @@
 //    @Test
 //    public void taskRequestDtoSerializeTest() throws IOException {
 //        TaskResponseDto responseDto = new TaskResponseDto();
-//        responseDto.setId(1L);
+//        responseDto.setPk(1L);
 //        responseDto.setCompletedDate(LocalDateTime.now());
 //        responseDto.setTodo("청소");
 //        responseDto.setSubTasks(Arrays.asList(new TaskResponseDto.RefTask(2L, "방청소"), new TaskResponseDto.RefTask(3L, "거실청소")));

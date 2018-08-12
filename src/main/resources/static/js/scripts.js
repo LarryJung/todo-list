@@ -18,10 +18,12 @@ $(document).on("click", "#addBtn", function (e) {
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             console.log(data);
+            $('#todo').val('');
             todoCreateFunction(data)
         },
         error: function (data) {
-            alert("예약 등 에러!")
+            console.log(data);
+            alert(data)
         }
     });
 });
@@ -30,13 +32,18 @@ function todoCreateFunction(data) {
     var source = $("#todoList-template").html();
     var template = Handlebars.compile(source);
     var html = template([data]);
-    console.log(html);
     $('#todoListTable tbody').append(html);
 }
 
+function doneCreateFunction(data) {
+    var source = $("#doneList-template").html();
+    var template = Handlebars.compile(source);
+    var html = template([data]);
+    $('#doneListTable tbody').append(html);
+}
 
 $(document).ready(showTodoList());
-// $(document).ready(showDoneList());
+$(document).ready(showDoneList());
 
 function showTodoList() {
     var source = $("#todoList-template").html();
@@ -48,12 +55,11 @@ function showTodoList() {
     }).then(function (data) {
         console.log(data);
         var html = template(data);
-        console.log(html);
         $('#todoListTable tbody').append(html);
     });
 }
 
-function doneTodoList() {
+function showDoneList() {
     var source = $("#doneList-template").html();
     var template = Handlebars.compile(source);
     $.ajax({
@@ -62,31 +68,43 @@ function doneTodoList() {
     }).then(function (data) {
         console.log(data);
         var html = template(data);
-        console.log(html);
         $('#doneListTable tbody').append(html);
     });
 }
 
-// $.fn.editable.defaults.ajaxOptions = {type: "PUT"};
-// $(document).ready(function() {
-//     $('#edit-todo').editable({
-//         type: 'text',
-//         // url: '/',
-//         title: 'Modify Todo',
-//         success: function(response, newValue) {
-//             console.log(newValue);
-//         }
-//     });
-// });
+$.fn.editable.defaults.ajaxOptions = {type: "PUT"};
+
+
+$(document).on("click", "#todo-complete-btn", function (e) {
+    e.preventDefault();
+    var btn = $(this);
+    var id = $('td:first', $(this).parents('tr')).text();
+    $.ajax({
+        url: "/api/tasks/" + id + "/complete",
+        success: function (data) {
+            btn.closest('tr').remove();
+            doneCreateFunction(data);
+        },
+        error: function (data) {
+            console.log(data);
+            alert(data)
+        }
+    })
+});
+
 
 $(document).on("click", "#edit-todo", function (e) {
+    e.preventDefault();
     var todo = $(this);
+    var pk = $('td:first', $(this).parents('tr')).text();
     todo.editable({
         type: 'text',
-        // url: '/',
+        pk: pk,
+        url: '/api/tasks/' + pk,
         title: 'Modify Todo',
         success: function(response, newValue) {
-            console.log(newValue);
+            console.log(response);
+            $(this).parents('tr').find('td:eq(3)').html(response.modifiedDate);
         }
     });
 });

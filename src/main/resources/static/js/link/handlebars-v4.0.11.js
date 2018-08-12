@@ -3334,7 +3334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var isBlockParam = isSimple && !!this.blockParamIndex(sexpr.path.parts[0]);
 
 	    // a mustache is an eligible helper if:
-	    // * its id is simple (a single part, not `this` or `..`)
+	    // * its pk is simple (a single part, not `this` or `..`)
 	    var isHelper = !isBlockParam && _ast2['default'].helpers.helperExpression(sexpr);
 
 	    // if a mustache is an eligible helper but not a definite

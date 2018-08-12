@@ -94,14 +94,14 @@ public class Task extends AbstractEntity{
         this.completedDate = LocalDateTime.now();
         return this;
     }
-//
-//    public Task updateTodo(String todo) {
-//        this.todo = todo;
-//        return this;
-//    }
+
+    public Task updateTodo(String todo) {
+        this.todo = todo;
+        return this;
+    }
 //
 //    public IdTodoPair toIdTodoPairDto() {
-//        return new IdTodoPair(id, todo);
+//        return new IdTodoPair(pk, todo);
 //    }
 //
 //    @Override
@@ -109,7 +109,7 @@ public class Task extends AbstractEntity{
 //        if (this == o) return true;
 //        if (o == null || getClass() != o.getClass()) return false;
 //        Task task = (Task) o;
-//        return Objects.equals(id, task.id) &&
+//        return Objects.equals(pk, task.pk) &&
 //                Objects.equals(createdDate, task.createdDate) &&
 //                Objects.equals(modifiedDate, task.modifiedDate) &&
 //                Objects.equals(completedDate, task.completedDate) &&
@@ -121,13 +121,13 @@ public class Task extends AbstractEntity{
 //    @Override
 //    public int hashCode() {
 //
-//        return Objects.hash(id, createdDate, modifiedDate, completedDate, todo, subTasks, masterTasks);
+//        return Objects.hash(pk, createdDate, modifiedDate, completedDate, todo, subTasks, masterTasks);
 //    }
 
 //    @Override
 //    public String toString() {
 //        return "Task{" +
-//                "id=" + id +
+//                "pk=" + pk +
 //                ", createdDate=" + createdDate +
 //                ", modifiedDate=" + modifiedDate +
 //                ", completedDate=" + completedDate +

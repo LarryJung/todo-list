@@ -3,6 +3,7 @@ package com.larry.todolist.web;
 import com.larry.todolist.domain.Task;
 import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
+import com.larry.todolist.dto.requestDto.UpdateDto;
 import com.larry.todolist.dto.responseDto.IdTodoPair;
 import com.larry.todolist.service.TaskService;
 import org.slf4j.Logger;
@@ -46,32 +47,23 @@ public class ApiTodoController {
                 .body(updatedTask);
     }
 
-//    @PutMapping("/{presentTaskId}")
-//    public ResponseEntity<Task> updateTaskContent(@PathVariable Long presentTaskId, @RequestBody String todo) {
-//        Task presentTask = taskService.findById(presentTaskId);
-//        Task updatedTask = taskService.update(presentTask, todo);
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(updatedTask);
-//    }
-//
-//    @GetMapping("/{presentTaskId}/complete")
-//    public ResponseEntity<Task> completeTask(@PathVariable Long presentTaskId) {
-//        log.info("일을 끝내러 왔습니다. {}", presentTaskId);
-//        Task updatedTask = taskService.complete(presentTaskId);
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(updatedTask);
-//    }
-//
-//    @GetMapping("/autoComplete")
-//    public ResponseEntity<List<Task>> autoComplete(@RequestParam String candidateParam) {
-//        log.info("candidata param : {}", candidateParam);
-//        List<Task> canditates = taskService.findCandidatesByTodo(candidateParam);
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                .body(canditates);
-//    }
+    @PutMapping(value = "/{presentTaskId}",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<Task> updateTaskContent(@PathVariable Long presentTaskId, UpdateDto updateDto) {
+        log.info("update 입니다 : {}", updateDto);
+        Task updatedTask = taskService.update(updateDto);
+        return ResponseEntity.ok()
+                .body(updatedTask);
+    }
+
+    @GetMapping("/{presentTaskId}/complete")
+    public ResponseEntity<Task> completeTask(@PathVariable Long presentTaskId) {
+        log.info("일을 끝내러 왔습니다. {}", presentTaskId);
+        Task updatedTask = taskService.complete(presentTaskId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(updatedTask);
+    }
 
     @GetMapping("")
     public ResponseEntity<List<Task>> findAllByComplete(@RequestParam boolean complete) {

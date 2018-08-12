@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class IdTodoPair {
 
-    @JsonProperty("id")
+    @JsonProperty("pk")
     private Long id;
     @JsonProperty("todo")
     private String todo;
