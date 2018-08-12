@@ -22,27 +22,27 @@ public class References {
     public References(List<Task> tasks) {
         this.tasks = tasks;
     }
-
-    @JsonIgnore
-    public boolean isAllCompleted() {
-        return tasks.stream().allMatch(Task::wasCompleted);
-    }
-
-    public References addTask(Task task) {
-        if (!tasks.contains(task)) {
-            tasks.add(task);
-            return this;
-        }
-        return this;
-    }
-
-    @JsonIgnore
-    public List<Long> getNotCompletedList() {
-        return tasks.stream()
-                .filter(r -> !r.wasCompleted())
-                .map(Task::getId)
-                .collect(Collectors.toList());
-    }
+//
+//    @JsonIgnore
+//    public boolean isAllCompleted() {
+//        return tasks.stream().allMatch(Task::wasCompleted);
+//    }
+//
+//    public References addTask(Task task) {
+//        if (!tasks.contains(task)) {
+//            tasks.add(task);
+//            return this;
+//        }
+//        return this;
+//    }
+//
+//    @JsonIgnore
+//    public List<Long> getNotCompletedList() {
+//        return tasks.stream()
+//                .filter(r -> !r.wasCompleted())
+//                .map(Task::getId)
+//                .collect(Collectors.toList());
+//    }
 
     @JsonIgnore
     public boolean isEmpty() {

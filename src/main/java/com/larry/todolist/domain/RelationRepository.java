@@ -7,9 +7,4 @@ import java.util.Optional;
 
 public interface RelationRepository extends JpaRepository<Relation, Long> {
 
-	Optional<Relation> findByOwnerAndFriend(User owner, User friend);
-
-	List<Relation> findByOwner(User loginUser);
-
-
 }

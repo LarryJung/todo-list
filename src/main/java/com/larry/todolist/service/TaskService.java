@@ -36,49 +36,49 @@ public class TaskService {
     public Task findByTodo(String todo) {
         return taskRepository.findByTodo(todo).orElseThrow(EntityNotFoundException::new);
     }
+//
+//    public Task registerTask(TaskRequestDto dto) {
+//        Task afterRegisterMaster = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
+//        return registerReferences(afterRegisterMaster, dto.getSubTasksDto());
+//    }
 
-    public Task registerTask(TaskRequestDto dto) {
-        Task afterRegisterMaster = registerReferences(dto.toEntity(), dto.getMasterTasksDto());
-        return registerReferences(afterRegisterMaster, dto.getSubTasksDto());
-    }
-
-    @Transactional
-    public Task registerReferences(Task presentTask, ReferenceTaskDto references) {
-        if (references == null) {
-            log.info("reference is null");
-            return save(presentTask);
-        }
-        if (references.getTaskType().equals(TaskType.SUB)) {
-            Arrays.stream(references.getReferenceTasks()).forEach(r -> presentTask.addSubTask(findById(r)));
-        }
-        if (references.getTaskType().equals(TaskType.MASTER)) {
-            Arrays.stream(references.getReferenceTasks()).forEach(r -> findById(r).addSubTask(presentTask));
-        }
-        return save(presentTask);
-    }
+//    @Transactional
+//    public Task registerReferences(Task presentTask, ReferenceTaskDto references) {
+//        if (references == null) {
+//            log.info("reference is null");
+//            return save(presentTask);
+//        }
+//        if (references.getTaskType().equals(TaskType.SUB)) {
+//            Arrays.stream(references.getReferenceTasks()).forEach(r -> presentTask.addSubTask(findById(r)));
+//        }
+//        if (references.getTaskType().equals(TaskType.MASTER)) {
+//            Arrays.stream(references.getReferenceTasks()).forEach(r -> findById(r).addSubTask(presentTask));
+//        }
+//        return save(presentTask);
+//    }
 
     private Task save(Task task) {
         return taskRepository.save(task);
     }
-
-    @Transactional
-    public Task complete(Long presentTaskId) {
-        return findById(presentTaskId).completeTask();
-    }
-
-    @Transactional // unique 제약조건 때문에 겹치면 에러가 나겠지?
-    public Task update(Task presentTask, String todo) {
-        return presentTask.updateTodo(todo);
-    }
-
-    public List<Task> findCandidatesByTodo(String param) {
-        return taskRepository.findAllByTodoContains(param);
-    }
-
-    public List<IdTodoPair> findAllIdAndTodo() {
-        return findAll().stream().map(t -> t.toIdTodoPairDto()).collect(Collectors.toList());
-
-    }
+//
+//    @Transactional
+//    public Task complete(Long presentTaskId) {
+//        return findById(presentTaskId).completeTask();
+//    }
+//
+//    @Transactional // unique 제약조건 때문에 겹치면 에러가 나겠지?
+//    public Task update(Task presentTask, String todo) {
+//        return presentTask.updateTodo(todo);
+//    }
+//
+//    public List<Task> findCandidatesByTodo(String param) {
+//        return taskRepository.findAllByTodoContains(param);
+//    }
+//
+//    public List<IdTodoPair> findAllIdAndTodo() {
+//        return findAll().stream().map(t -> t.toIdTodoPairDto()).collect(Collectors.toList());
+//
+//    }
 
     public List<Task> findAll(boolean complete) {
         if (complete) {

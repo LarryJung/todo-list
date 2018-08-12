@@ -1,37 +1,28 @@
 package com.larry.todolist.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+@NoArgsConstructor
+@Getter
 @Entity
 public class Relation extends AbstractEntity{
 
 	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_relation_owner"))
-	private User owner;
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_relation_master"))
+	private Task master;
 
 	@ManyToOne
-	private User friend;
+	private Task sub;
 
-	public Relation() {
+	public Relation(Task master, Task sub) {
+		this.master = master;
+		this.sub = sub;
 	}
-
-	public Relation(User owner, User sender) {
-		super(0L);
-		this.owner = owner;
-		this.friend = sender;
-	}
-
-	public User getOwner() {
-		return owner;
-	}
-
-	public User getFriend() {
-		return friend;
-	}
-
 
 }

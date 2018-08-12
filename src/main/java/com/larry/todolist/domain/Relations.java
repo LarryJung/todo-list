@@ -1,18 +1,18 @@
 package com.larry.todolist.domain;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
 @Embeddable
 public class Relations {
 
-	@OneToMany(mappedBy="owner")
+	@OneToMany(mappedBy = "master")
 	private List<Relation> relations = new ArrayList<>();
-
-	public Relations() {
-	}
 
 	public Relations(List<Relation> relations) {
 		this.relations =relations;
@@ -20,14 +20,6 @@ public class Relations {
 
 	public List<Relation> getRelations() {
 		return relations;
-	}
-
-	public void setRelations(List<Relation> relations) {
-		this.relations = relations;
-	}
-
-	public int getSize() {
-		return relations.size();
 	}
 
 }

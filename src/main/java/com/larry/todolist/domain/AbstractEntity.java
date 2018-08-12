@@ -1,5 +1,8 @@
 package com.larry.todolist.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -8,6 +11,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Getter
+@NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class AbstractEntity {
@@ -16,36 +21,16 @@ public class AbstractEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
 	@CreatedDate
-	private LocalDateTime createDate;
+	private LocalDateTime createdDate;
 
+	@JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
 	@LastModifiedDate
 	private LocalDateTime modifiedDate;
 
-	public AbstractEntity() {
-	}
-
-	public AbstractEntity(long id) {
+	public AbstractEntity(Long id) {
 		this.id = id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getFormattedCreateDate() {
-		return getFormattedDate(createDate, "yyyy.MM.dd HH:mm:ss");
-	}
-
-	public String getFormattedModifiedDate() {
-		return getFormattedDate(modifiedDate, "yyyy.MM.dd HH:mm:ss");
-	}
-
-	private String getFormattedDate(LocalDateTime dateTime, String format) {
-		if (dateTime == null) {
-			return "";
-		}
-		return dateTime.format(DateTimeFormatter.ofPattern(format));
 	}
 
 	@Override
@@ -70,8 +55,4 @@ public class AbstractEntity {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "AbstractEntity [id=" + id + ", createDate=" + createDate + ", modifiedDate=" + modifiedDate + "]";
-	}
 }
