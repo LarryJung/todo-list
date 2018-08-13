@@ -14,12 +14,12 @@ public class RelationsTest {
     private Task laundry = Task.of(2L, "빨래");
 
     @Test
-    public void allComplateTest() {
+    public void allCompleteTest() {
         Relation relation1 = Relation.masterAndSub(chores, laundry);
         Relations relations1= new Relations(Arrays.asList(relation1));
         assertFalse(relations1.isSubTaskAllCompleted(chores));
         laundry.completeTask();
-        assertTrue(relation1.isSubTaskCompleted(chores));
+        assertTrue(relation1.isSubTaskCompleted());
     }
 
 }
