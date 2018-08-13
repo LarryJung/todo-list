@@ -9,6 +9,9 @@
 - MasterTask, SubTask 간의 관계를 표현하는 Relation 클래스를 만들어 다대다 관계를 일대다 - 다대일 관계로 풀었으며, 
 RelationRepository가 있음으로 인해서 참조관계의 탐색이 용이해짐.   
  
+### 수정 기능 구현 전략
+- jQuery 라이브러이인 x-editable 사용. 값의 수정 이벤트를 읽어 ajax로 요청 처리. 라이브러리의 ajax요청 포멧에 맞추어 Dto로 요청 바디 전달 
+ 
 ### 삭제 기능 구현 전략
 - 연관관계의 주인(외래키 관리)은 MasterTask로 설정하였으며, 따라서 데이터 삭제 시 참조 무결성 관계에 따라 SubTask들을 먼저 삭제할 수 없음. 하위 할일 부터 삭제 가능
 - 엔티티 삭제 시 영속성을 보장하는 CASCADE REMOVE로 설정
