@@ -56,7 +56,7 @@
                 <h3>해야할 일들</h3>
             </div>
             <div class="container-fluid" id="todoListTable">
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered text-center" id="todoTable">
                     <thead>
                     <th style="text-align:center">Id</th>
                     <th style="text-align:center">할 일</th>
@@ -72,13 +72,13 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">
-                    <ul class="pagination">
-                        <li class="disabled"><a><<</a></li>
-                        <li class="disabled"><a><</a></li>
-                        <li class="disabled active"><a>1</a></li>
+                    <ul class="pagination" id="todoPagination">
+                        <li class="goFirstPage"><a><<</a></li>
+                        <li class="goBackPage"><a><</a></li>
+                        <li class="goPage" data-page="1"><a>1</a></li>
                         <li class="goPage" data-page="2"><a>2</a></li>
                         <li class="goPage" data-page="3"><a>3</a></li>
-                        <li class="disabled"><a>></a></li>
+                        <li class="goNextPage"><a>></a></li>
                         <li class="goLastPage"><a>>></a></li>
                     </ul>
                 </div>
@@ -89,7 +89,7 @@
                 <h3>완료된 일들</h3>
             </div>
             <div class="container-fluid" id="doneListTable">
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered text-center" id="doneTable">
                     <thead>
                     <th style="text-align:center">Id</th>
                     <th style="text-align:center">할 일</th>
@@ -105,13 +105,13 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">
-                    <ul class="pagination">
-                        <li class="disabled"><a><<</a></li>
-                        <li class="disabled"><a><</a></li>
-                        <li class="disabled active"><a>1</a></li>
+                    <ul class="pagination" id="donePagination">
+                        <li class="goFirstPage"><a><<</a></li>
+                        <li class="goBackPage"><a><</a></li>
+                        <li class="goPage" data-page="1"><a>1</a></li>
                         <li class="goPage" data-page="2"><a>2</a></li>
                         <li class="goPage" data-page="3"><a>3</a></li>
-                        <li class="disabled"><a>></a></li>
+                        <li class="goNextPage"><a>></a></li>
                         <li class="goLastPage"><a>>></a></li>
                     </ul>
                 </div>

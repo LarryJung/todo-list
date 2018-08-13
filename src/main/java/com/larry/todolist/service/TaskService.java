@@ -78,13 +78,6 @@ public class TaskService {
     public Task complete(Long presentTaskId) {
         return findById(presentTaskId).completeTask();
     }
-//
-//    public List<Task> findAll(boolean complete) {
-//        if (complete) {
-//            return taskRepository.findAllByCompletedDateIsNotNull();
-//        }
-//        return taskRepository.findAllByCompletedDateIsNull();
-//    }
 
     @Transactional
     public Task update(UpdateDto updateDto) {
@@ -114,22 +107,19 @@ public class TaskService {
             list = taskRepository.findAllByCompletedDateIsNull(pageable);
         }
         log.info("page list? {}", list);
-        // 3은 블럭 사이즈
         PagingDto pagingDto = PagingDto.builder()
                 .startPage(0)
-                .endPage(pages)
+                .endPage(((pNo/3)*3) + (3-1))
                 .totalBlock(pages % 3 == 0 ? pages / 3 : (pages / 3) + 1)
                 .totalPage(pages)
                 .blockPageNum(3)
                 .totalCount((int) totalCount)
-                .block(pNo % 3 == 0 ? pNo/3 : (pNo/3)+1).build();
+                .block(pNo % 3 == 0 ? pNo/3 : (pNo/3)+1)
+                .page(pNo).build();
         List<Task> tasks = list.getContent();
         for (Task task : tasks) {
             System.out.println(task.getTodo());
         }
-        System.out.println(list.getTotalPages());
-        System.out.println(list.getNumber());
-        System.out.println(list.getNumberOfElements());
         return new PageResult(pagingDto, tasks);
     }
 }
