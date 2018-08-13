@@ -3,10 +3,10 @@ $(document).on("click", "#addBtn", function (e) {
     var masterTasksDto;
     var subTasksDto;
     if ($('#masterTasks').val()) {
-        masterTasksDto = {taskType: 'MASTER', referenceTasks: $('#masterTasks').val().split(",")};
+        masterTasksDto = {taskType: 'MASTER', referenceTasks: $('#masterTasks').val().replace(/[\t\s]/g,'').split(',')};
     }
     if ($('#subTasks').val()) {
-        subTasksDto = {taskType: 'SUB', referenceTasks: $('#subTasks').val().split(",")};
+        subTasksDto = {taskType: 'SUB', referenceTasks: $('#subTasks').val().replace(/[\t\s]/g,'').split(",")};
     }
     var taskRequestDto = {todo: $('#todo').val(), masterTasksDto: masterTasksDto, subTasksDto: subTasksDto};
     console.log(taskRequestDto);
@@ -19,6 +19,7 @@ $(document).on("click", "#addBtn", function (e) {
         success: function (data) {
             console.log(data);
             $('#todo').val('');
+            document.getElementById("myText")
             todoCreateFunction(data)
         },
         error: function (data) {
@@ -29,17 +30,26 @@ $(document).on("click", "#addBtn", function (e) {
 });
 
 function todoCreateFunction(data) {
-    var source = $("#todoList-template").html();
-    var template = Handlebars.compile(source);
-    var html = template([data]);
-    $('#todoListTable tbody').append(html);
+    var rowCount = $('#todoTable tr').length;
+    console.log("table # of rows " + rowCount);
+    if (rowCount < 6) {
+        var source = $("#todoList-template").html();
+        var template = Handlebars.compile(source);
+        var html = template([data]);
+        $('#todoListTable tbody').append(html);
+    }
 }
 
 function doneCreateFunction(data) {
-    var source = $("#doneList-template").html();
-    var template = Handlebars.compile(source);
-    var html = template([data]);
-    $('#doneListTable tbody').append(html);
+    var rowCount = $('#doneTable tr').length;
+    console.log("table # of rows " + rowCount);
+    if (rowCount < 6) {
+        var source = $("#doneList-template").html();
+        var template = Handlebars.compile(source);
+        var html = template([data]);
+        $('#doneListTable tbody').append(html);
+    }
+
 }
 
 $(document).on('click', "#todo-refs-btn", function () {
@@ -236,31 +246,6 @@ $(document).on('click', ".goLastPage", function() {
         doPagination(paging.totalPage, true, doneTable, doneTemplate);
     }
 });
-//
-// $(document).on('click', ".goFirstPage", makeTable(0));
-// $(document).on('click', ".goBackPage", makeTable(Number(paging.startPage) - 1));
-// $(document).on('click', ".goPage", makeTable($(this).attr("data-page")));
-// $(document).on('click', ".goNextPage", makeTable(Number(paging.endPage) + 1));
-// $(document).on('click', ".goLastPage", makeTable(paging.totalPage));
-//
-// function makeTable(page) {
-//     console.log("테이블을 만들자 몇페이지? "+ page);
-//     var complete;
-//     table = $(this).closest('table');
-//     var source;
-//     if ($(this).closest('ul').attr('id') == "todoPagination") {
-//         complete = false;
-//         source = $("#todoList-template").html();
-//     }
-//     if ($(this).closest('ul').attr('id') == "donePagination") {
-//         complete = true;
-//         source = $("#doneList-template").html();
-//     }
-//     var template = Handlebars.compile(source);
-//     console.log("complete : " + complete);
-//     console.log("template" + template);
-//     doPagination(page, complete, table, template)
-// }
 
 function doPagination(page, complete, table, template) {
     $.ajax({
@@ -305,7 +290,7 @@ function doPagination(page, complete, table, template) {
                 }
             }
             console.log("1 paging block : " + paging.block +" paging total block" +paging.totalBlock);
-            if (Number(paging.block) + 1 < paging.totalBlock) {
+            if (Number(paging.block) + 1 < paging.totalBlock || paging.block == 0) {
                 pagination.append("<li class=\"goNextPage\"><a>></a></li>");         //다음페이지버튼 활성화
             } else {
                 pagination.append("<li class=\"disabled\"><a>></a></li>");           //다음페이지버튼 비활성화
