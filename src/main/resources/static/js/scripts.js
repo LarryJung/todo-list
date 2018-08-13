@@ -100,10 +100,53 @@ $(document).ready(function() {
 
 $(document).on('click', ".goFirstPage", function() {
     console.log(this);
+    if($(this).closest("ul").attr("id") == "todoPagination") {
+        todoTable = $('#todoTable');
+        var todoSource = $("#todoList-template").html();
+        var todoTemplate = Handlebars.compile(todoSource);
+        doPagination(0, false, todoTable, todoTemplate);
+    }
+    if($(this).closest("ul").attr("id") == "donePagination") {
+        doneTable = $('#doneTable');
+        var doneSource = $("#doneList-template").html();
+        var doneTemplate = Handlebars.compile(doneSource);
+        doPagination(0, true, doneTable, doneTemplate);
+    }
 });
 
 $(document).on('click', ".goBackPage", function() {
     console.log(this);
+    var page = $(this).closest(".pagination").find(".goPage").attr('data-page');
+    var paging;
+    var complete;
+    if($(this).closest("ul").attr("id") == "todoPagination") {
+        complete = false;
+    }
+    if($(this).closest("ul").attr("id") == "donePagination") {
+        complete = true;
+    }
+    $.ajax({
+        url: '/api/tasks/' + '?' + $.param({"page": page, "size": 5, "complete": complete}),
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            response = result.list;
+            paging = result.paging;
+        }
+    });
+    console.log("paging : " + paging);
+    if($(this).closest("ul").attr("id") == "todoPagination") {
+        todoTable = $('#todoTable');
+        var todoSource = $("#todoList-template").html();
+        var todoTemplate = Handlebars.compile(todoSource);
+        doPagination(Number(paging.startPage) - 1, false, todoTable, todoTemplate);
+    }
+    if($(this).closest("ul").attr("id") == "donePagination") {
+        doneTable = $('#doneTable');
+        var doneSource = $("#doneList-template").html();
+        var doneTemplate = Handlebars.compile(doneSource);
+        doPagination(Number(paging.startPage) - 1, true, doneTable, doneTemplate);
+    }
 });
 
 $(document).on('click', ".goPage", function() {
@@ -124,32 +167,74 @@ $(document).on('click', ".goPage", function() {
 });
 
 $(document).on('click', ".goNextPage", function(){
+    var page = $(this).closest(".pagination").find(".goPage").attr('data-page');
+    console.log("page page : " + page);
     var paging;
-    console.log($(this).closest("goPage").text());
-    // if($(this).closest("ul").attr("id") == "todoPagination") {
-    //     $.ajax({
-    //         url: '/api/tasks/' + '?' + $.param({"page": page, "size": 5, "complete": complete}),
-    //         dataType: "json",
-    //         success: function (result) {
-    //             response = result.list;
-    //             console.log(response);
-    //             paging = result.paging;
-    //         }
-    //     });
-    //     todoTable = $('#todoTable');
-    //     var todoSource = $("#todoList-template").html();
-    //     var todoTemplate = Handlebars.compile(todoSource);
-    //     doPagination(Number(paging.endPage) + 1, false, todoTable, todoTemplate);
-    // }
-    // if($(this).closest("ul").attr("id") == "donePagination") {
-    //     doneTable = $('#doneTable');
-    //     var doneSource = $("#doneList-template").html();
-    //     var doneTemplate = Handlebars.compile(doneSource);
-    //     doPagination(Number(paging.endPage) + 1, true, doneTable, doneTemplate);
-    // }
+    var complete;
+    if($(this).closest("ul").attr("id") == "todoPagination") {
+        complete = false;
+    }
+    if($(this).closest("ul").attr("id") == "donePagination") {
+        complete = true;
+    }
+    $.ajax({
+        url: '/api/tasks/' + '?' + $.param({"page": page, "size": 5, "complete": complete}),
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            response = result.list;
+            paging = result.paging;
+        }
+    });
+    console.log("paging : " + paging);
+    if($(this).closest("ul").attr("id") == "todoPagination") {
+        todoTable = $('#todoTable');
+        var todoSource = $("#todoList-template").html();
+        var todoTemplate = Handlebars.compile(todoSource);
+        console.log("end page? " + (Number(paging.endPage) + 1));
+        doPagination(Number(paging.endPage) + 1, false, todoTable, todoTemplate);
+    }
+    if($(this).closest("ul").attr("id") == "donePagination") {
+        doneTable = $('#doneTable');
+        var doneSource = $("#doneList-template").html();
+        var doneTemplate = Handlebars.compile(doneSource);
+        doPagination(Number(paging.endPage) + 1, true, doneTable, doneTemplate);
+    }
 });
+
 $(document).on('click', ".goLastPage", function() {
     console.log(this);
+    var page = $(this).closest(".pagination").find(".goPage").attr('data-page');
+    var paging;
+    var complete;
+    if($(this).closest("ul").attr("id") == "todoPagination") {
+        complete = false;
+    }
+    if($(this).closest("ul").attr("id") == "donePagination") {
+        complete = true;
+    }
+    $.ajax({
+        url: '/api/tasks/' + '?' + $.param({"page": page, "size": 5, "complete": complete}),
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            response = result.list;
+            paging = result.paging;
+        }
+    });
+    console.log("paging : " + paging);
+    if($(this).closest("ul").attr("id") == "todoPagination") {
+        todoTable = $('#todoTable');
+        var todoSource = $("#todoList-template").html();
+        var todoTemplate = Handlebars.compile(todoSource);
+        doPagination(paging.totalPage, false, todoTable, todoTemplate);
+    }
+    if($(this).closest("ul").attr("id") == "donePagination") {
+        doneTable = $('#doneTable');
+        var doneSource = $("#doneList-template").html();
+        var doneTemplate = Handlebars.compile(doneSource);
+        doPagination(paging.totalPage, true, doneTable, doneTemplate);
+    }
 });
 //
 // $(document).on('click', ".goFirstPage", makeTable(0));
@@ -181,6 +266,7 @@ function doPagination(page, complete, table, template) {
     $.ajax({
         url: '/api/tasks/' + '?' + $.param({"page": page, "size": 5, "complete": complete}),
         dataType: "json",
+        async: false,
         success: function (result) {
             response = result.list;
             console.log(response);
@@ -218,14 +304,14 @@ function doPagination(page, complete, table, template) {
                     pagination.append("<li class=\"goPage\" data-page=\"" + i + "\"><a>" + i + "</a></li>"); //버튼 활성화
                 }
             }
-            console.log("paging block : " + paging.block +" paging total block" +paging.totalBlock);
-            if (paging.block < paging.totalBlock) {
+            console.log("1 paging block : " + paging.block +" paging total block" +paging.totalBlock);
+            if (Number(paging.block) + 1 < paging.totalBlock) {
                 pagination.append("<li class=\"goNextPage\"><a>></a></li>");         //다음페이지버튼 활성화
             } else {
                 pagination.append("<li class=\"disabled\"><a>></a></li>");           //다음페이지버튼 비활성화
             }
 
-            console.log("paging block : " + paging.page +" paging total block" +paging.totalPage);
+            console.log("present page : " + paging.page +" total page" +paging.totalPage);
             if (paging.page < paging.totalPage) {                                      //현재페이지가 전체페이지보다 작을때
                 pagination.append("<li class=\"goLastPage\"><a>>></a></li>");    //마지막페이지로 가기 버튼 활성화
             } else {

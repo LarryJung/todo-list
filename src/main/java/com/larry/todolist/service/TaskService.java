@@ -108,13 +108,13 @@ public class TaskService {
         }
         log.info("page list? {}", list);
         PagingDto pagingDto = PagingDto.builder()
-                .startPage(0)
+                .startPage(((pNo/3)*3))
                 .endPage(((pNo/3)*3) + (3-1))
-                .totalBlock(pages % 3 == 0 ? pages / 3 : (pages / 3) + 1)
+                .totalBlock(((((int)totalCount)%(3*pageable.getPageSize())) == 0 ? (((int)totalCount)/(3*pageable.getPageSize())) : (((int)totalCount)/(3*pageable.getPageSize())) + 1))
                 .totalPage(pages)
                 .blockPageNum(3)
                 .totalCount((int) totalCount)
-                .block(pNo % 3 == 0 ? pNo/3 : (pNo/3)+1)
+                .block(pNo / 3)
                 .page(pNo).build();
         List<Task> tasks = list.getContent();
         for (Task task : tasks) {
