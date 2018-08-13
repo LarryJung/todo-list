@@ -65,18 +65,6 @@ public class TaskAcceptanceTest {
     }
 
     @Test
-    public void registerTask_with_subTaskList() throws IOException {
-        Long cleaningRoom = registerTask("방청소");
-        TaskRequestDto taskRequestDto = new TaskRequestDto();
-        taskRequestDto.setTodo("청소");
-        taskRequestDto.setSubTasksDto(new ReferenceTaskDto(SUB, cleaningRoom));
-        ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
-        log.info("response json : {}", response.getBody());
-        assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
-        relationRepository.findAll().forEach(r -> log.info("객체 관계는? : {}", r));
-    }
-
-    @Test
     public void registerTask_with_referenceInfo() throws IOException {
         Long subTask1 = registerTask("김치먹기");
         Long subTask2 = registerTask("콩나물국먹기");
