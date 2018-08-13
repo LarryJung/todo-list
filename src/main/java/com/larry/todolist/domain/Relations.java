@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import java.util.*;
@@ -15,7 +16,7 @@ import java.util.*;
 public class Relations {
 
 	@JsonUnwrapped
-	@OneToMany(mappedBy = "master")
+	@OneToMany(mappedBy = "master", cascade = CascadeType.REMOVE)
 	private List<Relation> relations = new ArrayList<>();
 
 	public Relations() {

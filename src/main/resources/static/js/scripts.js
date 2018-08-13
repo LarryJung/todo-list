@@ -62,6 +62,25 @@ $(document).on('click', "#todo-refs-btn", function () {
     });
 });
 
+
+
+$(document).on("click", "#done-remove-btn", function (e) {
+    e.preventDefault();
+    var btn = $(this);
+    var id = $('td:first', $(this).parents('tr')).text();
+    $.ajax({
+        url: "/api/tasks/" + id,
+        type: 'DELETE',
+        success: function (data) {
+            btn.closest('tr').remove();
+        },
+        error: function (data) {
+            console.log(data);
+            alert(JSON.stringify(data, null, '\t'));
+        }
+    })
+});
+
 $(document).on("click", "#todo-complete-btn", function (e) {
     e.preventDefault();
     var btn = $(this);

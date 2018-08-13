@@ -4,10 +4,7 @@ import com.larry.todolist.domain.support.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -16,7 +13,7 @@ import java.util.Objects;
 public class Relation extends AbstractEntity {
 
 	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_relation_master"))
+	@JoinColumn(name = "master_id")
 	private Task master;
 
 	@ManyToOne

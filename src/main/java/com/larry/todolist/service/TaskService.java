@@ -121,4 +121,9 @@ public class TaskService {
         List<Task> tasks = list.getContent();
         return new PageResult(pagingDto, tasks);
     }
+
+    @Transactional
+    public void delete(Long presentTaskId) {
+        taskRepository.deleteById(presentTaskId);
+    }
 }

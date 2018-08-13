@@ -9,6 +9,10 @@
 - MasterTask, SubTask 간의 관계를 표현하는 Relation 클래스를 만들어 다대다 관계를 일대다 - 다대일 관계로 풀었으며, 
 RelationRepository가 있음으로 인해서 참조관계의 탐색이 용이해짐.   
  
+### 삭제 기능 구현 전략
+- 연관관계의 주인(외래키 관리)은 MasterTask로 설정하였으며, 따라서 데이터 삭제 시 참조 무결성 관계에 따라 SubTask들을 먼저 삭제할 수 없음. 하위 할일 부터 삭제 가능
+- 엔티티 삭제 시 영속성을 보장하는 CASCADE REMOVE로 설정
+ 
 ### 예외 처리 부문
 - 예외 상황에 대해서 일관된 형태로 응답을 가능하게 할 목적으로 클래스 생성
 - Advice를 통해 예외를 캐치하고 `ErrorMsg`오브젝트 형태로 일괄 변경
@@ -26,3 +30,8 @@ RelationRepository가 있음으로 인해서 참조관계의 탐색이 용이해
 2. `gradlew` 파일이 있는 경로에서 `./gradlew build` 로 빌드
 3. `java -jar build/libs/todolist-0.0.1-SNAPSHOT.jar` 실행 후 
 4. 브라우저에서 `localhost:8080`로 접속
+
+5. DB url : `http://localhost:8080/h2-console`
+6. JDBC : `jdbc:h2:mem:todolist` 
+
+7. 세부 동작 방식은 페이지 내 가이드 있음

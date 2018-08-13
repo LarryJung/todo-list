@@ -83,4 +83,10 @@ public class ApiTodoController {
                 .body(pageResult);
     }
 
+    @DeleteMapping("{presentTaskId}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long presentTaskId) {
+        taskService.delete(presentTaskId);
+        return ResponseEntity.ok().build();
+    }
+
 }
