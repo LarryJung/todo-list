@@ -204,6 +204,16 @@ public class TaskAcceptanceTest {
         return response.getBody().getId();
     }
 
+
+    @Test
+    public void pagingTest() {
+        for (int i = 0; i < 20; i++) {
+            registerTask(String.format("%d%d%d%d", i,i,i,i));
+        }
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/tasks?page=1&size=5&complete=false", String.class);
+        log.info("response body {}:", response.getBody());
+    }
+
     private Long registerTask(TaskRequestDto taskRequestDto) throws IOException {
         ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
         return mapper.readValue(response.getBody(), TaskResponseDto.class).getId();

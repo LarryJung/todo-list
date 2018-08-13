@@ -1,6 +1,7 @@
 package com.larry.todolist.web;
 
 import com.larry.todolist.domain.Task;
+import com.larry.todolist.domain.paging.PageResult;
 import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
 import com.larry.todolist.dto.requestDto.UpdateDto;
@@ -8,6 +9,7 @@ import com.larry.todolist.dto.responseDto.ReferenceShowDto;
 import com.larry.todolist.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.net.URI;
-import java.util.List;
 
 @RequestMapping("/api/tasks")
 @Controller
@@ -64,12 +65,12 @@ public class ApiTodoController {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(updatedTask);
     }
-
-    @GetMapping("")
-    public ResponseEntity<List<Task>> findAllByComplete(@RequestParam boolean complete) {
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(taskService.findAll(complete));
-    }
+//
+//    @GetMapping("")
+//    public ResponseEntity<List<Task>> findAllByComplete(@RequestParam boolean complete) {
+//        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .body(taskService.findAll(complete));
+//    }
 
     @GetMapping("{presentTaskId}/references")
     public ResponseEntity<ReferenceShowDto> findRelations(@PathVariable Long presentTaskId) {
@@ -79,5 +80,13 @@ public class ApiTodoController {
                 .body(taskService.findRelations(presentTaskId));
     }
 
+    @GetMapping("")
+    public ResponseEntity<PageResult> pageRequestByComplete(Pageable pageable, @RequestParam boolean complete) {
+        log.info("complete {}", complete);
+        PageResult pageResult = taskService.findPageByComplete(pageable, complete);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(pageResult);
+    }
 
 }

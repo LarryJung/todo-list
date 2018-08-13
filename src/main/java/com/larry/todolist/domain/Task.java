@@ -124,16 +124,5 @@ public class Task extends AbstractEntity{
 //        return Objects.hash(pk, createdDate, modifiedDate, completedDate, todo, subTasks, masterTasks);
 //    }
 
-//    @Override
-//    public String toString() {
-//        return "Task{" +
-//                "pk=" + pk +
-//                ", createdDate=" + createdDate +
-//                ", modifiedDate=" + modifiedDate +
-//                ", completedDate=" + completedDate +
-//                ", todo='" + todo + '\'' +
-//                ", subTasks=" + subTasks +
-//                ", masterTasks=" + masterTasks +
-//                '}';
-//    }
+
 }

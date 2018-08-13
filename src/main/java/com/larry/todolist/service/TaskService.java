@@ -1,25 +1,29 @@
 package com.larry.todolist.service;
 
 import com.larry.todolist.domain.*;
-import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
+import com.larry.todolist.domain.paging.PageResult;
+import com.larry.todolist.domain.paging.PagingDto;
 import com.larry.todolist.dto.requestDto.TaskRequestDto;
 import com.larry.todolist.dto.requestDto.UpdateDto;
 import com.larry.todolist.dto.responseDto.ReferenceShowDto;
 import com.larry.todolist.repository.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaskService {
 
     private final Logger log = LoggerFactory.getLogger(TaskService.class);
+
+    public static final int PAGE_SIZE = 5;
 
     @Resource(name = "taskRepository")
     private TaskRepository taskRepository;
@@ -74,13 +78,13 @@ public class TaskService {
     public Task complete(Long presentTaskId) {
         return findById(presentTaskId).completeTask();
     }
-
-    public List<Task> findAll(boolean complete) {
-        if (complete) {
-            return taskRepository.findAllByCompletedDateIsNotNull();
-        }
-        return taskRepository.findAllByCompletedDateIsNull();
-    }
+//
+//    public List<Task> findAll(boolean complete) {
+//        if (complete) {
+//            return taskRepository.findAllByCompletedDateIsNotNull();
+//        }
+//        return taskRepository.findAllByCompletedDateIsNull();
+//    }
 
     @Transactional
     public Task update(UpdateDto updateDto) {
@@ -93,5 +97,39 @@ public class TaskService {
         relationRepository.findAllBySubId(presentTaskId).forEach(t -> referenceShowDto.addMaster(t.getMaster()));
         relationRepository.findAllByMasterId(presentTaskId).forEach(t -> referenceShowDto.addSub(t.getSub()));
         return referenceShowDto;
+    }
+
+    public PageResult findPageByComplete(Pageable pageable, boolean complete) {
+        long totalCount = 0;
+        int pages = 0;
+        int pNo = pageable.getPageNumber();
+        Page<Task> list;
+        if (complete) {
+            totalCount = taskRepository.countByCompletedDateIsNotNull();
+            pages = (int)totalCount / pageable.getPageSize();
+            list = taskRepository.findAllByCompletedDateIsNotNull(pageable);
+        } else {
+            totalCount = taskRepository.countByCompletedDateIsNull();
+            pages = (int)totalCount / pageable.getPageSize();
+            list = taskRepository.findAllByCompletedDateIsNull(pageable);
+        }
+        log.info("page list? {}", list);
+        // 3은 블럭 사이즈
+        PagingDto pagingDto = PagingDto.builder()
+                .startPage(0)
+                .endPage(pages)
+                .totalBlock(pages % 3 == 0 ? pages / 3 : (pages / 3) + 1)
+                .totalPage(pages)
+                .blockPageNum(3)
+                .totalCount((int) totalCount)
+                .block(pNo % 3 == 0 ? pNo/3 : (pNo/3)+1).build();
+        List<Task> tasks = list.getContent();
+        for (Task task : tasks) {
+            System.out.println(task.getTodo());
+        }
+        System.out.println(list.getTotalPages());
+        System.out.println(list.getNumber());
+        System.out.println(list.getNumberOfElements());
+        return new PageResult(pagingDto, tasks);
     }
 }

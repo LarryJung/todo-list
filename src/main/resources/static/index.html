@@ -72,14 +72,14 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">
-                    <ul class="pagination center-block" style="display:inline-block;">
-                        <li><a href="#">«</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">»</a></li>
+                    <ul class="pagination">
+                        <li class="disabled"><a><<</a></li>
+                        <li class="disabled"><a><</a></li>
+                        <li class="disabled active"><a>1</a></li>
+                        <li class="goPage" data-page="2"><a>2</a></li>
+                        <li class="goPage" data-page="3"><a>3</a></li>
+                        <li class="disabled"><a>></a></li>
+                        <li class="goLastPage"><a>>></a></li>
                     </ul>
                 </div>
             </div>
@@ -105,14 +105,14 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">
-                    <ul class="pagination center-block" style="display:inline-block;">
-                        <li><a href="#">«</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">»</a></li>
+                    <ul class="pagination">
+                        <li class="disabled"><a><<</a></li>
+                        <li class="disabled"><a><</a></li>
+                        <li class="disabled active"><a>1</a></li>
+                        <li class="goPage" data-page="2"><a>2</a></li>
+                        <li class="goPage" data-page="3"><a>3</a></li>
+                        <li class="disabled"><a>></a></li>
+                        <li class="goLastPage"><a>>></a></li>
                     </ul>
                 </div>
             </div>
@@ -125,15 +125,15 @@
         <div class="col-sm-6">
             <p id="masterRefs" multiple="multiple">
                 {{#masterTasks}}
-                <p value="{{id}}">{{todo}}</p>
-                {{/masterTasks}}
+            <p value="{{id}}">{{todo}}</p>
+            {{/masterTasks}}
             </p>
         </div>
         <div class="col-sm-6">
             <p id="subRefs" multiple="multiple">
                 {{#subTasks}}
-                <p value="{{id}}">{{todo}}</p>
-                {{/subTasks}}
+            <p value="{{id}}">{{todo}}</p>
+            {{/subTasks}}
             </p>
         </div>
     </div>
@@ -153,15 +153,15 @@
                         <div>
                             <p id="masterSelect" multiple="multiple">
                                 {{#masterTasks}}
-                                <p value="{{id}}">{{todo}}</p>
-                                {{/masterTasks}}
+                            <p value="{{id}}">{{todo}}</p>
+                            {{/masterTasks}}
                             </p>
                         </div>
                         <div>
                             <p id="subSelect" multiple="multiple">
                                 {{#subTasks}}
-                                <p value="{{id}}">{{todo}}</p>
-                                {{/subTasks}}
+                            <p value="{{id}}">{{todo}}</p>
+                            {{/subTasks}}
                             </p>
                         </div>
                     </div>
