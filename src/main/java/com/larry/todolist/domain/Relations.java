@@ -31,7 +31,7 @@ public class Relations {
 	}
 
 	public boolean isSubTaskAllCompleted(Task questioner) {
-		return relations.stream().filter(r -> r.getMaster().equals(questioner)).allMatch(r -> r.isSubTaskCompleted(questioner));
+		return relations.stream().filter(r -> r.getMaster().equals(questioner)).allMatch(r -> r.isSubTaskCompleted());
 	}
 
 	public Object getNotCompletedSubTaskList() {

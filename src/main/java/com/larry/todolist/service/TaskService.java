@@ -24,7 +24,8 @@ public class TaskService {
 
     private final Logger log = LoggerFactory.getLogger(TaskService.class);
 
-    public static final int PAGE_SIZE = 5;
+    public static final int PAGES_PER_BLOCK = 3;
+
 
     @Resource(name = "taskRepository")
     private TaskRepository taskRepository;
@@ -70,7 +71,7 @@ public class TaskService {
                 .forEach(ref -> relationRepository.findAllBySubId(ref.getMaster().getId())
                         .forEach(rr -> {
                             if (rr.getMaster().equals(findById(r.getSubId()))) {
-                                throw new RuntimeException("참조관계가 이상합니다.");
+                                throw new RuntimeException("참조관계가 이상합니다. - 순환");
                             }
                         }));
     }
@@ -109,18 +110,15 @@ public class TaskService {
         }
         log.info("page list? {}", list);
         PagingDto pagingDto = PagingDto.builder()
-                .startPage(((pNo/3)*3))
-                .endPage(((pNo/3)*3) + (3-1))
-                .totalBlock(((((int)totalCount)%(3*pageable.getPageSize())) == 0 ? (((int)totalCount)/(3*pageable.getPageSize())) : (((int)totalCount)/(3*pageable.getPageSize())) + 1))
+                .startPage(((pNo/ PAGES_PER_BLOCK)*PAGES_PER_BLOCK))
+                .endPage(((pNo/PAGES_PER_BLOCK)*PAGES_PER_BLOCK) + (PAGES_PER_BLOCK-1))
+                .totalBlock(((((int)totalCount)%(PAGES_PER_BLOCK*pageable.getPageSize())) == 0 ? (((int)totalCount)/(PAGES_PER_BLOCK*pageable.getPageSize())) : (((int)totalCount)/(PAGES_PER_BLOCK*pageable.getPageSize())) + 1))
                 .totalPage(pages)
-                .blockPageNum(3)
+                .blockPageNum(PAGES_PER_BLOCK)
                 .totalCount((int) totalCount)
-                .block(pNo / 3)
+                .block(pNo / PAGES_PER_BLOCK)
                 .page(pNo).build();
         List<Task> tasks = list.getContent();
-        for (Task task : tasks) {
-            System.out.println(task.getTodo());
-        }
         return new PageResult(pagingDto, tasks);
     }
 }

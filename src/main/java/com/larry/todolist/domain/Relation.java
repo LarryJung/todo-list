@@ -31,10 +31,7 @@ public class Relation extends AbstractEntity {
 		return new Relation(master, sub);
 	}
 
-	public boolean isSubTaskCompleted(Task questioner) {
-//		if (sub.equals(questioner)) {
-//			return true;
-//		}
+	public boolean isSubTaskCompleted() {
 		return sub.wasCompleted();
 	}
 
