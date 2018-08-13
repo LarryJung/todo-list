@@ -1,4 +1,4 @@
-package com.larry.todolist.dto.requestDto;
+package com.larry.todolist.domain.dto.requestDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,12 @@ public class UpdateDto {
     private String name;
 
     private String value;
+
+    public UpdateDto(Long pk, String name, String value) {
+        this.pk = pk;
+        this.name = name;
+        this.value = value;
+    }
 
     @Override
     public String toString() {

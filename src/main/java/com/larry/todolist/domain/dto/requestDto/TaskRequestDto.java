@@ -1,16 +1,13 @@
-package com.larry.todolist.dto.requestDto;
+package com.larry.todolist.domain.dto.requestDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.larry.todolist.domain.IdRelation;
-import com.larry.todolist.domain.Relation;
-import com.larry.todolist.domain.Relations;
 import com.larry.todolist.domain.Task;
 import com.larry.todolist.domain.support.TaskType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.larry.todolist.DtoTest;
 
 import com.larry.todolist.domain.support.TaskType;
-import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
+import com.larry.todolist.domain.dto.requestDto.ReferenceTaskDto;
 import org.junit.Test;
 
 public class ReferenceTaskDtoTest {

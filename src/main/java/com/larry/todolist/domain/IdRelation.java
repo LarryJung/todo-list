@@ -1,9 +1,9 @@
 package com.larry.todolist.domain;
 
-import com.larry.todolist.repository.TaskRepository;
+import com.larry.todolist.domain.repository.RelationRepository;
+import com.larry.todolist.domain.repository.TaskRepository;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.EntityNotFoundException;
 

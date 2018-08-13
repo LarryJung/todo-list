@@ -1,6 +1,6 @@
 package com.larry.todolist.domain;
 
-import lombok.Data;
+import com.larry.todolist.domain.support.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,11 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
 @Entity
-public class Relation extends AbstractEntity{
+public class Relation extends AbstractEntity {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_relation_master"))
@@ -31,9 +32,9 @@ public class Relation extends AbstractEntity{
 	}
 
 	public boolean isSubTaskCompleted(Task questioner) {
-		if (sub.equals(questioner)) {
-			return true;
-		}
+//		if (sub.equals(questioner)) {
+//			return true;
+//		}
 		return sub.wasCompleted();
 	}
 
@@ -43,5 +44,21 @@ public class Relation extends AbstractEntity{
 				"master=" + master.getTodo() +
 				", sub=" + sub.getTodo() +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		Relation relation = (Relation) o;
+		return Objects.equals(master, relation.master) &&
+				Objects.equals(sub, relation.sub);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(super.hashCode(), master, sub);
 	}
 }

@@ -1,6 +1,7 @@
 package com.larry.todolist.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import com.larry.todolist.domain.support.AbstractEntity;
 import com.larry.todolist.exceptionHandle.CannotCompleteException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,12 +10,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Task extends AbstractEntity{
+public class Task extends AbstractEntity {
 
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime completedDate;
@@ -65,23 +67,10 @@ public class Task extends AbstractEntity{
         this.relations = relations;
         return this;
     }
-//
-//    public Task addSubTask(Task subTask) {
-//        subTasks = subTasks.addTask(subTask);
-//        subTask.addMasterTask(this);
-//        return this;
-//    }
-//
-//    private Task addMasterTask(Task masterTask) {
-//        masterTasks = masterTasks.addTask(masterTask);
-//        return this;
-//    }
-//
 
     public boolean wasCompleted() {
         return completedDate != null;
     }
-
 
     public Task completeTask() {
         if (relations == null) {
@@ -99,30 +88,31 @@ public class Task extends AbstractEntity{
         this.todo = todo;
         return this;
     }
-//
-//    public IdTodoPair toIdTodoPairDto() {
-//        return new IdTodoPair(pk, todo);
-//    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Task task = (Task) o;
-//        return Objects.equals(pk, task.pk) &&
-//                Objects.equals(createdDate, task.createdDate) &&
-//                Objects.equals(modifiedDate, task.modifiedDate) &&
-//                Objects.equals(completedDate, task.completedDate) &&
-//                Objects.equals(todo, task.todo) &&
-//                Objects.equals(subTasks, task.subTasks) &&
-//                Objects.equals(masterTasks, task.masterTasks);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//
-//        return Objects.hash(pk, createdDate, modifiedDate, completedDate, todo, subTasks, masterTasks);
-//    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Task task = (Task) o;
+        return Objects.equals(completedDate, task.completedDate) &&
+                Objects.equals(todo, task.todo) &&
+                Objects.equals(relations, task.relations);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), completedDate, todo, relations);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "completedDate=" + completedDate +
+                ", todo='" + todo + '\'' +
+                ", relations=" + relations +
+                '}';
+    }
 
 }

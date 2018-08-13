@@ -1,9 +1,9 @@
-package com.larry.todolist.domain;
+package com.larry.todolist.domain.repository;
 
+import com.larry.todolist.domain.Relation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RelationRepository extends JpaRepository<Relation, Long> {
     List<Relation> findAllBySubId(Long subId);

@@ -1,4 +1,4 @@
-package com.larry.todolist.dto.responseDto;
+package com.larry.todolist.domain.dto.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.larry.todolist.domain.Task;

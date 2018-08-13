@@ -1,4 +1,4 @@
-package com.larry.todolist.dto.responseDto;
+package com.larry.todolist.domain.dto.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Data
 @Setter
@@ -18,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class TaskResponseDto {
 
-    @JsonProperty("pk")
+    @JsonProperty("id")
     private Long id;
 
     @JsonProperty("createdDate")

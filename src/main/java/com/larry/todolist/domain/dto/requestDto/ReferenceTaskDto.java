@@ -1,4 +1,4 @@
-package com.larry.todolist.dto.requestDto;
+package com.larry.todolist.domain.dto.requestDto;
 
 import com.larry.todolist.domain.IdRelation;
 import com.larry.todolist.domain.support.TaskType;

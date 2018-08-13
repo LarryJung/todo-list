@@ -16,7 +16,7 @@ public class RelationsTest {
     @Test
     public void allComplateTest() {
         Relation relation1 = Relation.masterAndSub(chores, laundry);
-        Relations relations1= new Relations(new HashSet<>(Arrays.asList(relation1)));
+        Relations relations1= new Relations(Arrays.asList(relation1));
         assertFalse(relations1.isSubTaskAllCompleted(chores));
         laundry.completeTask();
         assertTrue(relation1.isSubTaskCompleted(chores));

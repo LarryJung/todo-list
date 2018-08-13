@@ -3,11 +3,12 @@ package com.larry.todolist.acceptanceTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.larry.todolist.domain.RelationRepository;
 import com.larry.todolist.domain.Task;
-import com.larry.todolist.dto.requestDto.ReferenceTaskDto;
-import com.larry.todolist.dto.requestDto.TaskRequestDto;
-import com.larry.todolist.dto.responseDto.TaskResponseDto;
+import com.larry.todolist.domain.dto.requestDto.ReferenceTaskDto;
+import com.larry.todolist.domain.dto.requestDto.TaskRequestDto;
+import com.larry.todolist.domain.dto.requestDto.UpdateDto;
+import com.larry.todolist.domain.dto.responseDto.TaskResponseDto;
+import com.larry.todolist.domain.repository.RelationRepository;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,9 +51,8 @@ public class TaskAcceptanceTest {
         taskRequestDto.setTodo("할일목록페이지만들기");
         ResponseEntity<String> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, String.class);
         assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
-        log.info("response body : {}", response.getBody());
-        TaskResponseDto dto = mapper.readValue(response.getBody(), TaskResponseDto.class);
-        assertThat(dto.getTodo(), is("할일목록페이지만들기"));
+        TaskResponseDto taskDto = mapper.readValue(response.getBody(), TaskResponseDto.class);
+        assertThat(taskDto.getTodo(), is("할일목록페이지만들기"));
     }
 
     @Test
@@ -175,35 +175,12 @@ public class TaskAcceptanceTest {
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
-//    @Test
-//    public void updateTest_pass() throws IOException {
-//        Long today = registerTask("오늘할일");
-//        final String updateContent = "수정내용";
-//        HttpHeaders headers = new HttpHeaders();
-//        HttpEntity<String> requestEntity = new HttpEntity<>(updateContent, headers);
-//        ResponseEntity<String> response = restTemplate.exchange(String.format("/api/tasks/%d", today), HttpMethod.PUT, requestEntity, String.class);
-//        TaskResponseDto taskDto = mapper.readValue(response.getBody(), TaskResponseDto.class);
-//        assertThat(taskDto.getTodo(), is(updateContent));
-//    }
-//
-//    @Test
-//    public void updateTest_unique_fail() {
-//        Long task1 = registerTask("잠자기"); registerTask("잠안자기");
-//        final String updateContent = "잠안자기";
-//        HttpHeaders headers = new HttpHeaders();
-//        HttpEntity<String> requestEntity = new HttpEntity<>(updateContent, headers);
-//        ResponseEntity<String> response = restTemplate.exchange(String.format("/api/tasks/%d", task1), HttpMethod.PUT, requestEntity, String.class);
-//        log.info("response body {}", response.getBody());
-//        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-//    }
-
     public Long registerTask(String todo) {
         TaskRequestDto taskRequestDto = new TaskRequestDto();
         taskRequestDto.setTodo(todo);
         ResponseEntity<Task> response = restTemplate.postForEntity("/api/tasks", taskRequestDto, Task.class);
         return response.getBody().getId();
     }
-
 
     @Test
     public void pagingTest() {

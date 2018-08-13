@@ -5,11 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.HashSet;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TaskTest {
@@ -26,10 +23,17 @@ public class TaskTest {
         Relation relation3 = Relation.masterAndSub(chores, cleaningRoom);
         Relation relation4 = Relation.masterAndSub(cleaning, cleaningRoom);
 
-        chores.registerRelations(new Relations( new HashSet<>(Arrays.asList(relation1, relation2, relation3))));
-        laundry.registerRelations(new Relations(new HashSet<>(Arrays.asList(relation1))));
-        cleaning.registerRelations(new Relations(new HashSet<>(Arrays.asList(relation2, relation4))));
-        cleaningRoom.registerRelations(new Relations(new HashSet<>(Arrays.asList(relation3, relation4))));
+        chores.registerRelations(new Relations(Arrays.asList(relation1, relation2, relation3)));
+        laundry.registerRelations(new Relations(Arrays.asList(relation1)));
+        cleaning.registerRelations(new Relations(Arrays.asList(relation2, relation4)));
+        cleaningRoom.registerRelations(new Relations(Arrays.asList(relation3, relation4)));
+    }
+
+    @Test
+    public void completeTest_simple_one_object() {
+        assertFalse(cleaningRoom.wasCompleted());
+        cleaningRoom.completeTask();
+        assertTrue(cleaningRoom.wasCompleted());
     }
 
     @Test(expected = CannotCompleteException.class)

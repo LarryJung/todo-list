@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Embeddable
@@ -19,22 +16,22 @@ public class Relations {
 
 	@JsonUnwrapped
 	@OneToMany(mappedBy = "master")
-	private Set<Relation> relations = new HashSet<>();
+	private List<Relation> relations = new ArrayList<>();
 
 	public Relations() {
 
 	}
 
-	public Relations(Set<Relation> relations) {
+	public Relations(List<Relation> relations) {
 		this.relations = relations;
 	}
 
-	public Set<Relation> getRelations() {
+	public List<Relation> getRelations() {
 		return relations;
 	}
 
 	public boolean isSubTaskAllCompleted(Task questioner) {
-		return relations.stream().allMatch(r -> r.isSubTaskCompleted(questioner));
+		return relations.stream().filter(r -> r.getMaster().equals(questioner)).allMatch(r -> r.isSubTaskCompleted(questioner));
 	}
 
 	public Object getNotCompletedSubTaskList() {
@@ -46,4 +43,18 @@ public class Relations {
 		return this;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		Relations relations1 = (Relations) o;
+		return Objects.equals(relations, relations1.relations);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(super.hashCode(), relations);
+	}
 }
