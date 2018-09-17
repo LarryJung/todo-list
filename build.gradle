@@ -18,6 +18,7 @@ apply plugin: 'io.spring.dependency-management'
 group = 'com.larry'
 version = '0.0.2-SNAPSHOT'
 sourceCompatibility = 1.8
+archivesBaseName = 'todo-list'
 
 repositories {
 	mavenCentral()
