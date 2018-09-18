@@ -16,7 +16,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.larry'
-version = '0.0.5.5-SNAPSHOT'
+version = '0.0.5.6-SNAPSHOT'
 sourceCompatibility = 1.8
 archivesBaseName = 'todo-list'
 
